@@ -25,7 +25,7 @@ void Actor::draw() {
 	// Donde se va a pegar en el renderizador
 	SDL_Rect destination;
 	destination.x = x - width / 2;
-	destination.y = y - width / 2;
+	destination.y = y - height / 2;
 	destination.w = width;
 	destination.h = height;
 	// Modificar para que la referencia sea el punto central.

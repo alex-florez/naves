@@ -45,6 +45,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>Archivos de origen\Actors</Filter>
     </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Archivos de origen\Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -60,6 +63,9 @@
       <Filter>Archivos de encabezado\Actors</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>Archivos de encabezado\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Background.h">
       <Filter>Archivos de encabezado\Actors</Filter>
     </ClInclude>
   </ItemGroup>
