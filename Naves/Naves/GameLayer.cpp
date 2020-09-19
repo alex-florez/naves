@@ -127,6 +127,40 @@ void GameLayer::update() {
 		}
 	}
 
+	// Colisiones entre enemigos y proyectiles
+	list<Enemy*> deleteEnemies;
+	list<Projectile*> deleteProjectiles;
+	for (auto const& enemy : enemies) {
+		for (auto const& projectile : projectiles) {
+			if (enemy->isOverlap(projectile)) {
+				// Comprobamos que el proyectil no este ya pendiente de eliminar
+				bool pInList = std::find(deleteProjectiles.begin(), 
+					deleteProjectiles.end(), 
+						projectile) != deleteProjectiles.end();
+				if (!pInList) {
+					deleteProjectiles.push_back(projectile);
+				}
+				// Comprobamos si el enemigo ya esta pendiente de ser eliminado
+				bool eInList = std::find(deleteEnemies.begin(),
+					deleteEnemies.end(), 
+						enemy) != deleteEnemies.end();
+				if (!eInList) {
+					deleteEnemies.push_back(enemy);
+				}
+
+			}
+		}
+	}
+	// Eliminamos los proyectiles y enemigos necesarios
+	for (auto const& delEnemy : deleteEnemies) {
+		enemies.remove(delEnemy);
+	}
+	deleteEnemies.clear();
+
+	for (auto const& delProjectile : deleteProjectiles) {
+		projectiles.remove(delProjectile);
+	}
+	deleteProjectiles.clear();
 	cout << "update GameLayer" << endl;
 }
 
