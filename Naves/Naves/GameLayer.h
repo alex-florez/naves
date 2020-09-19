@@ -21,6 +21,8 @@ public:
 	void update() override;
 	void draw() override;
 	void keysToControls(SDL_Event event);
+	void markEnemyForDelete(Enemy* enemy, list<Enemy*>& deleteList);
+	void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteList);
 
 	Player* player;
 	Background* background;

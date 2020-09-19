@@ -8,7 +8,7 @@ Enemy::Enemy(float x, float y, Game* game)
 
 void Enemy::update() {
 	x = x + vx;
-	if (x - (width / 2) <= 0) {
+	/*if (x - (width / 2) <= 0) {
 		vx = vx * -1;
-	}
+	}*/
 }
