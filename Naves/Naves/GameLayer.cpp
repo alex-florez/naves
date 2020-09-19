@@ -11,11 +11,14 @@ void GameLayer::init() {
 
 	// Enemigos
 	enemies.clear(); // Vaciar la lista de enemigos, por si se reinicia el juego
-	enemies.push_back(new Enemy(300, 50, game));
-	enemies.push_back(new Enemy(300, 200, game));
+	/*enemies.push_back(new Enemy(300, 50, game));
+	enemies.push_back(new Enemy(300, 200, game));*/
 
 	// Proyectiles
 	projectiles.clear();
+
+	// Enemigos eliminados
+	killedEnemies = 0;
 
 }
 
@@ -109,6 +112,19 @@ void GameLayer::keysToControls(SDL_Event event) {
 }
 
 void GameLayer::update() {
+	// Generamos los enemigos
+	newEnemyTime--;
+	if (newEnemyTime <= 0) {
+		for (int i = 0; i < (killedEnemies / ENEMY_SPAWN_FREQUENCY) + 1; i++) {
+			cout << "New enemy spawned" << endl;
+			// Random position
+			int rX = (rand() % (600 - 500)) + 1 + 500;
+			int rY = (rand() % (300 - 60)) + 1 + 60;
+			enemies.push_back(new Enemy(rX, rY, game));
+		}
+		newEnemyTime = ENEMY_SPAWN_TIME;
+	}
+
 	player->update();
 	// Actualizamos los enemigos
 	for (auto const& enemy : enemies) {
@@ -133,6 +149,8 @@ void GameLayer::update() {
 	for (auto const& enemy : enemies) {
 		for (auto const& projectile : projectiles) {
 			if (enemy->isOverlap(projectile)) {
+				// Incrementar el nº de enemigos eliminados
+				killedEnemies++;
 				// Comprobamos que el proyectil no este ya pendiente de eliminar
 				bool pInList = std::find(deleteProjectiles.begin(), 
 					deleteProjectiles.end(), 
@@ -161,7 +179,7 @@ void GameLayer::update() {
 		projectiles.remove(delProjectile);
 	}
 	deleteProjectiles.clear();
-	cout << "update GameLayer" << endl;
+	cout << "Killed Enemies: " << killedEnemies << " Current enemies: " << enemies.size() << endl;
 }
 
 void GameLayer::draw() {

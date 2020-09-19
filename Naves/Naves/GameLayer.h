@@ -8,6 +8,10 @@
 
 #include <list>
 
+#define ENEMY_SPAWN_TIME 110
+#define ENEMY_SPAWN_FREQUENCY 5		
+
+
 class GameLayer : public Layer
 {
 public:
@@ -30,5 +34,8 @@ public:
 	list<Enemy*> enemies;
 	// Lista de proyectiles
 	list<Projectile*> projectiles;
+
+	int newEnemyTime = 0;
+	int killedEnemies = 0;
 };
 
