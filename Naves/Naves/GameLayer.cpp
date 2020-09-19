@@ -107,6 +107,15 @@ void GameLayer::update() {
 	for (auto const& enemy : enemies) {
 		enemy->update();
 	}
+
+	// Detección de colisiones
+	for (auto const& enemy : enemies) {
+		if (player->isOverlap(enemy)) {
+			init();
+			return; // Se reinicia el juego.
+		}
+	}
+
 	cout << "update GameLayer" << endl;
 }
 
