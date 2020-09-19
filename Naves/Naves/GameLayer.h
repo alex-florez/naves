@@ -3,6 +3,9 @@
 #include "Layer.h"
 #include "Player.h"
 #include "Background.h"
+#include "Enemy.h"
+
+#include <list>
 
 class GameLayer : public Layer
 {
@@ -21,5 +24,8 @@ public:
 	bool controlShoot = false;
 	int controlMoveX = 0;
 	int controlMoveY = 0;
+
+	// Lista de enemigos
+	list<Enemy*> enemies;
 };
 
