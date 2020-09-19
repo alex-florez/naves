@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Actor.h"
+#include "Projectile.h"
 
 #define PLAYER_SPEED 3
 
@@ -12,5 +13,9 @@ public:
 	void update();
 	void moveX(float axis);
 	void moveY(float axis);
+	Projectile* shoot();
+
+	int shootCadence = 30;
+	int shootTime = 0;
 };
 

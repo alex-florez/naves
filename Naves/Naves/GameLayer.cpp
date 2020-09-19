@@ -9,9 +9,13 @@ void GameLayer::init() {
 	player = new Player(50, 50, game);
 	background = new Background("res/fondo.png", WIDTH * 0.5, HEIGHT * 0.5, game);
 
+	// Enemigos
 	enemies.clear(); // Vaciar la lista de enemigos, por si se reinicia el juego
 	enemies.push_back(new Enemy(300, 50, game));
 	enemies.push_back(new Enemy(300, 200, game));
+
+	// Proyectiles
+	projectiles.clear();
 
 }
 
@@ -24,7 +28,10 @@ void GameLayer::processControls() {
 	// procesar controles
 	// Disparar
 	if (controlShoot) {
-
+		Projectile* newProjectile = player->shoot();
+		if (newProjectile != nullptr) {
+			projectiles.push_back(newProjectile);
+		}
 	}
 	// Eje X
 	if (controlMoveX > 0) {
@@ -107,6 +114,10 @@ void GameLayer::update() {
 	for (auto const& enemy : enemies) {
 		enemy->update();
 	}
+	// Actualizamos los proyectiles
+	for (auto const& projectile : projectiles) {
+		projectile->update();
+	}
 
 	// Detección de colisiones
 	for (auto const& enemy : enemies) {
@@ -125,6 +136,10 @@ void GameLayer::draw() {
 	// Dibujamos los enemigos
 	for (auto const& enemy : enemies) {
 		enemy->draw();
+	}
+	// Dibujamos los proyectiles
+	for (auto const& projectile : projectiles) {
+		projectile->draw();
 	}
 
 	SDL_RenderPresent(game->renderer); // Renderiza el juego
