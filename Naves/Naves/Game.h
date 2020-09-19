@@ -14,6 +14,9 @@ using namespace std;
 #define HEIGHT 320
 #define FPS 30
 
+#include "Layer.h"
+class Layer;
+
 class Game
 {
 public:
@@ -22,5 +25,6 @@ public:
 	SDL_Window* window; // ventana
 	SDL_Renderer* renderer; // renderizador
 	bool loopActive; // Juego activo?
+	Layer* gameLayer;
 };
 
