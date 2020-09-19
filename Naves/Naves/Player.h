@@ -3,7 +3,7 @@
 #include "Actor.h"
 #include "Projectile.h"
 
-#define PLAYER_SPEED 3
+#define PLAYER_SPEED 5
 
 class Player : public Actor
 {

@@ -133,17 +133,23 @@ void GameLayer::update() {
 	// Actualizamos los enemigos
 	for (auto const& enemy : enemies) {
 		enemy->update();
+		// Enemigo a la izquierda de la pantalla
+		if (enemy->x + enemy->width / 2 <= 0) { 
+			markEnemyForDelete(enemy, deleteEnemies);
+		}
 	}
 	// Actualizamos los proyectiles
 	for (auto const& projectile : projectiles) {
 		projectile->update();
+		// Proyectil a la derecha de la pantalla
+		if (projectile->x - projectile->width / 2 >= WIDTH) {
+			markProjectileForDelete(projectile, deleteProjectiles);
+		}
 	}
 
-	// Colisión del jugador con el enemigo y enemigos a la izquierda de la pantalla
+	// Colisión del jugador con el enemigo
 	for (auto const& enemy : enemies) {
-		if (enemy->x + enemy->width / 2 <= 0) { // Enemigo a la izquierda de la pantalla
-			markEnemyForDelete(enemy, deleteEnemies);
-		} else if (player->isOverlap(enemy)) { // Colisión (Player, Enemigo)
+		if (player->isOverlap(enemy)) { // Colisión (Player, Enemigo)
 			init();
 			return; // Se reinicia el juego.
 		}
@@ -184,7 +190,11 @@ void GameLayer::update() {
 		projectiles.remove(delProjectile);
 	}
 	deleteProjectiles.clear();
-	cout << "Killed Enemies: " << killedEnemies << " Current enemies: " << enemies.size() << endl;
+
+	// Información
+	cout << "Killed Enemies: " << killedEnemies 
+		 << " Current enemies: " << enemies.size() 
+		 << " Shoots: " << projectiles.size() << endl;
 }
 
 void GameLayer::markEnemyForDelete(Enemy* enemy, list<Enemy*>& deleteList) {
