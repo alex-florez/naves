@@ -1,5 +1,9 @@
 #include "GameLayer.h"
 
+void markEnemyForDelete(Enemy* enemy, list<Enemy*>& deleteList);
+void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteList);
+
+
 GameLayer::GameLayer(Game* game)
 	: Layer(game) { // Se hace una llamada al constructor del padre
 	init();
@@ -63,6 +67,9 @@ void GameLayer::keysToControls(SDL_Event event) {
 	if (event.type == SDL_KEYDOWN) { // Tecla pulsada
 		int code = event.key.keysym.sym;
 		switch (code) {
+		case SDLK_ESCAPE: // Tecla Esc
+			game->loopActive = false;
+			break;
 		case SDLK_d: // derecha
 			controlMoveX = 1;
 			break;
@@ -109,6 +116,10 @@ void GameLayer::keysToControls(SDL_Event event) {
 			break;
 		}
 	}
+	// Se hace click en la X para cerrar la ventana
+	if (event.type == SDL_QUIT) {
+		game->loopActive = false;
+	}
 }
 
 void GameLayer::update() {
@@ -136,6 +147,9 @@ void GameLayer::update() {
 		// Enemigo a la izquierda de la pantalla
 		if (enemy->x + enemy->width / 2 <= 0) { 
 			markEnemyForDelete(enemy, deleteEnemies);
+		} else if (player->isOverlap(enemy)) { // Colisión con el jugador
+			init();
+			return; // Se reinicia el juego.
 		}
 	}
 	// Actualizamos los proyectiles
@@ -147,39 +161,19 @@ void GameLayer::update() {
 		}
 	}
 
-	// Colisión del jugador con el enemigo
-	for (auto const& enemy : enemies) {
-		if (player->isOverlap(enemy)) { // Colisión (Player, Enemigo)
-			init();
-			return; // Se reinicia el juego.
-		}
-	}
-
 	// Colisiones entre enemigos y proyectiles
 	for (auto const& enemy : enemies) {
 		for (auto const& projectile : projectiles) {
 			if (enemy->isOverlap(projectile)) {
 				// Incrementar el nº de enemigos eliminados
 				killedEnemies++;
-				//// Comprobamos que el proyectil no este ya pendiente de eliminar
-				//bool pInList = std::find(deleteProjectiles.begin(), 
-				//	deleteProjectiles.end(), 
-				//		projectile) != deleteProjectiles.end();
-				//if (!pInList) {
-				//	deleteProjectiles.push_back(projectile);
-				//}
-				//// Comprobamos si el enemigo ya esta pendiente de ser eliminado
-				//bool eInList = std::find(deleteEnemies.begin(),
-				//	deleteEnemies.end(), 
-				//		enemy) != deleteEnemies.end();
-				//if (!eInList) {
-				//	deleteEnemies.push_back(enemy);
-				//}
 				markProjectileForDelete(projectile, deleteProjectiles);
 				markEnemyForDelete(enemy, deleteEnemies);
 			}
 		}
 	}
+
+
 	// Eliminamos los proyectiles y enemigos necesarios
 	for (auto const& delEnemy : deleteEnemies) {
 		enemies.remove(delEnemy);
@@ -197,24 +191,6 @@ void GameLayer::update() {
 		 << " Shoots: " << projectiles.size() << endl;
 }
 
-void GameLayer::markEnemyForDelete(Enemy* enemy, list<Enemy*>& deleteList) {
-	bool inList = std::find(deleteList.begin(),
-		deleteList.end(),
-		enemy) != deleteList.end();
-	if (!inList) {
-		deleteList.push_back(enemy);
-	}
-}
-
-void GameLayer::markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteList) {
-	bool inList = std::find(deleteList.begin(),
-		deleteList.end(),
-		projectile) != deleteList.end();
-	if (!inList) {
-		deleteList.push_back(projectile);
-	}
-}
-
 
 void GameLayer::draw() {
 	background->draw();
@@ -229,4 +205,25 @@ void GameLayer::draw() {
 	}
 
 	SDL_RenderPresent(game->renderer); // Renderiza el juego
+}
+
+
+// Métodos privados
+
+void markEnemyForDelete(Enemy* enemy, list<Enemy*>& deleteList) {
+	bool inList = std::find(deleteList.begin(),
+		deleteList.end(),
+		enemy) != deleteList.end();
+	if (!inList) {
+		deleteList.push_back(enemy);
+	}
+}
+
+void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteList) {
+	bool inList = std::find(deleteList.begin(),
+		deleteList.end(),
+		projectile) != deleteList.end();
+	if (!inList) {
+		deleteList.push_back(projectile);
+	}
 }
