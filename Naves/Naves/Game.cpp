@@ -44,3 +44,30 @@ void Game::loop() {
 		}
 	}
 }
+
+void Game::scale() {
+	scaledToMax = !scaledToMax;
+
+	if (scaledToMax) {
+		SDL_DisplayMode PCdisplay;
+		SDL_GetCurrentDisplayMode(0, &PCdisplay);
+		float scaleX = (float)PCdisplay.w / (float)WIDTH;
+		float scaleY = (float)PCdisplay.h / (float)HEIGHT;
+		// Nos quedamos con la menor  de las dos escalas para no deformar el juego.
+		scaleLower = scaleX;
+		if (scaleY < scaleX) {
+			scaleLower = scaleY;
+		}
+		// Cambiar dimensiones de la ventana
+		SDL_SetWindowSize(window, WIDTH * scaleLower, HEIGHT * scaleLower);
+		// Cambiar escala del render
+		SDL_RenderSetScale(renderer, scaleLower, scaleLower);
+	}
+	else { // Escala original
+		scaleLower = 1;
+		// Cambiar dimensiones de la ventana
+		SDL_SetWindowSize(window, WIDTH, HEIGHT);
+		// Cambiar escala del render
+		SDL_RenderSetScale(renderer, 1, 1);
+	}
+}

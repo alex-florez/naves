@@ -1,4 +1,5 @@
 #include "GameLayer.h"
+#include <ctime>
 
 void markEnemyForDelete(Enemy* enemy, list<Enemy*>& deleteList);
 void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteList);
@@ -23,6 +24,9 @@ void GameLayer::init() {
 
 	// Enemigos eliminados
 	killedEnemies = 0;
+
+	// Semilla aleatoria para generar números aleatorios
+	srand((unsigned)time(0));
 
 }
 
@@ -69,6 +73,9 @@ void GameLayer::keysToControls(SDL_Event event) {
 		switch (code) {
 		case SDLK_ESCAPE: // Tecla Esc
 			game->loopActive = false;
+			break;
+		case SDLK_1: // Tecla 1
+			game->scale();
 			break;
 		case SDLK_d: // derecha
 			controlMoveX = 1;
