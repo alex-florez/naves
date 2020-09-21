@@ -11,8 +11,13 @@ GameLayer::GameLayer(Game* game)
 }
 
 void GameLayer::init() {
+	points = 0;
+	textPoints = new Text("hola", WIDTH * 0.92, HEIGHT * 0.05, game);
+	textPoints->content = to_string(points);
+
 	player = new Player(50, 50, game);
 	background = new Background("res/fondo.png", WIDTH * 0.5, HEIGHT * 0.5, game);
+	backgroundPoints = new Actor("res/icono_puntos.png", WIDTH*0.85, HEIGHT*0.05, 24, 24, game);
 
 	// Enemigos
 	enemies.clear(); // Vaciar la lista de enemigos, por si se reinicia el juego
@@ -174,6 +179,9 @@ void GameLayer::update() {
 			if (enemy->isOverlap(projectile)) {
 				// Incrementar el nº de enemigos eliminados
 				killedEnemies++;
+				// Incrementar puntuación
+				points++;
+				textPoints->content = to_string(points);
 				markProjectileForDelete(projectile, deleteProjectiles);
 				markEnemyForDelete(enemy, deleteEnemies);
 			}
@@ -210,6 +218,9 @@ void GameLayer::draw() {
 	for (auto const& projectile : projectiles) {
 		projectile->draw();
 	}
+
+	textPoints->draw();
+	backgroundPoints->draw();
 
 	SDL_RenderPresent(game->renderer); // Renderiza el juego
 }

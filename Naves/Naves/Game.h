@@ -30,5 +30,6 @@ public:
 	Layer* gameLayer;
 	bool scaledToMax = false;
 	float scaleLower = 1; // Factor de escalado
+	TTF_Font* font;
 };
 
