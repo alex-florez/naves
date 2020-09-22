@@ -43,5 +43,8 @@ public:
 	// Puntuación
 	Text* textPoints;
 	int points;
+
+private:
+	void addNewEnemy();
 };
 

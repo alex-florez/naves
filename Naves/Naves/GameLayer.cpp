@@ -140,17 +140,7 @@ void GameLayer::update() {
 	list<Projectile*> deleteProjectiles; // Proyectiles a eliminar
 
 	// Generamos los enemigos
-	newEnemyTime--;
-	if (newEnemyTime <= 0) {
-		for (int i = 0; i < (killedEnemies / ENEMY_SPAWN_FREQUENCY) + 1; i++) {
-			cout << "New enemy spawned" << endl;
-			// Random position
-			int rX = (rand() % (600 - 500)) + 1 + 500;
-			int rY = (rand() % (300 - 60)) + 1 + 60;
-			enemies.push_back(new Enemy(rX, rY, game));
-		}
-		newEnemyTime = ENEMY_SPAWN_TIME;
-	}
+	addNewEnemy();
 
 	player->update();
 	// Actualizamos los enemigos
@@ -243,5 +233,20 @@ void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteLi
 		projectile) != deleteList.end();
 	if (!inList) {
 		deleteList.push_back(projectile);
+	}
+}
+
+
+void GameLayer::addNewEnemy() {
+	newEnemyTime--;
+	if (newEnemyTime <= 0) {
+		for (int i = 0; i < (killedEnemies / ENEMY_SPAWN_FREQUENCY) + 1; i++) {
+			cout << "New enemy spawned" << endl;
+			// Random position
+			int rX = (rand() % (600 - 500)) + 1 + 500;
+			int rY = (rand() % (300 - 60)) + 1 + 60;
+			enemies.push_back(new Enemy(rX, rY, game));
+		}
+		newEnemyTime = ENEMY_SPAWN_TIME;
 	}
 }
