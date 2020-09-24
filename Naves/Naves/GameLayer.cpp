@@ -22,7 +22,7 @@ void GameLayer::init() {
 	destroyProjectiles();
 
 	player = new Player(50, 50, game);
-	background = new Background("res/fondo.png", WIDTH * 0.5, HEIGHT * 0.5, game);
+	background = new Background("res/fondo.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
 	backgroundPoints = new Actor("res/icono_puntos.png", WIDTH*0.85, HEIGHT*0.05, 24, 24, game);
 
 	// Enemigos
@@ -146,6 +146,9 @@ void GameLayer::update() {
 
 	list<Enemy*> deleteEnemies; // Enemigos a eliminar
 	list<Projectile*> deleteProjectiles; // Proyectiles a eliminar
+
+	// Actualizamos el fondo móvil
+	background->update();
 
 	// Generamos los enemigos
 	addNewEnemy();
