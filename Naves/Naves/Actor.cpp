@@ -2,8 +2,10 @@
 
 Actor::Actor(string filename, float x, float y, int width, int height, Game* game) {
 	this->game = game;
-	SDL_Surface* surface = IMG_Load(filename.c_str());
-	texture = SDL_CreateTextureFromSurface(game->renderer, surface);
+	// Creamos la textura: la buscamos en la cache de texturas
+	//SDL_Surface* surface = IMG_Load(filename.c_str());
+	//texture = SDL_CreateTextureFromSurface(game->renderer, surface);
+	texture = game->getTexture(filename);
 	this->x = x;
 	this->y = y;
 	// Lo que mide el fichero
@@ -15,7 +17,7 @@ Actor::Actor(string filename, float x, float y, int width, int height, Game* gam
 }
 
 Actor::~Actor() {
-	SDL_DestroyTexture(texture);
+	//SDL_DestroyTexture(texture); // No podemos destruir la textura, porque está cacheada.
 }
 
 void Actor::draw() {

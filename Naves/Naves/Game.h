@@ -6,6 +6,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <map>
 
 using namespace std;
 
@@ -23,6 +24,9 @@ public:
 	Game();
 	void loop();
 	void scale();
+	SDL_Texture* getTexture(string filename);
+	map<string, SDL_Texture*> mapTextures; // map - caché para las texturas.
+
 
 	SDL_Window* window; // ventana
 	SDL_Renderer* renderer; // renderizador

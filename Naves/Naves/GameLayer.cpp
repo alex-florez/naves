@@ -11,6 +11,7 @@ GameLayer::GameLayer(Game* game)
 }
 
 void GameLayer::init() {
+
 	points = 0;
 	textPoints = new Text("hola", WIDTH * 0.92, HEIGHT * 0.05, game);
 	textPoints->content = to_string(points);
