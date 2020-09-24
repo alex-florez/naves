@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "Projectile.h"
 #include "Text.h"
+#include "Audio.h"
 
 #include <list>
 
@@ -44,7 +45,11 @@ public:
 	Text* textPoints;
 	int points;
 
+	// Audio
+	Audio* audioBackground;
 private:
 	void addNewEnemy();
+	void destroyEnemies();
+	void destroyProjectiles();
 };
 

@@ -30,6 +30,7 @@ Animation::Animation(string filename, float actorWidth, float actorHeight,
 	source.h = frameHeight;
 }
 
+
 bool Animation::update() {
 	updateTime++;
 

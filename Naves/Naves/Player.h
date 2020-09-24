@@ -2,6 +2,7 @@
 
 #include "Actor.h"
 #include "Projectile.h"
+#include "Audio.h"
 
 #define PLAYER_SPEED 5
 
@@ -17,5 +18,8 @@ public:
 
 	int shootCadence = 30;
 	int shootTime = 0;
+
+	// Audio
+	Audio* audioShoot;
 };
 

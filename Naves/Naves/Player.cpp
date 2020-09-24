@@ -3,6 +3,7 @@
 Player::Player(float x, float y, Game* game)
 	: Actor("res/jugador_nave.png", x, y, 50, 57, game) {
 
+	audioShoot = new Audio("res/efecto_disparo.wav", false);
 }
 
 void Player::update() {
@@ -24,6 +25,7 @@ void Player::moveY(float axis) {
 
 Projectile* Player::shoot() {
 	if (shootTime == 0) {
+		audioShoot->play(); // Efecto de sonido del disparo.
 		shootTime = shootCadence;
 		return new Projectile(x + width/2, y, game);
 	}

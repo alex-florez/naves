@@ -10,6 +10,8 @@ Enemy::Enemy(float x, float y, Game* game)
 	animation = aMoving;
 }
 
+
+
 void Enemy::update() {
 	// Actualizar la animación
 	animation->update();
