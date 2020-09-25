@@ -35,5 +35,15 @@ public:
 	bool scaledToMax = false;
 	float scaleLower = 1; // Factor de escalado
 	TTF_Font* font;
+
+	int const stateMoving = 1;
+	int const stateJumping = 2;
+	int const stateDying = 3;
+	int const stateDead = 4;
+	int const stateShooting = 5;
+
+	int const orientationRight = 1;
+	int const orientationLeft = 2;
+
 };
 
