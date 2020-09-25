@@ -44,7 +44,7 @@ bool Animation::update() {
 		if (currentFrame >= totalFrames) {
 			currentFrame = 0;
 
-			if (!loop) {
+			if (!loop) { // Si es finita indicar que ya terminó
 				return true;
 			}
 		}

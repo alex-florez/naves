@@ -7,21 +7,47 @@ Enemy::Enemy(float x, float y, Game* game)
 
 	aMoving = new Animation("res/enemigo_movimiento.png", width, height,
 								108, 40, 6, 3, true, game);
+	aDying = new Animation("res/enemigo_morir.png", width, height, 280, 40, 6, 8, false, game);
 	animation = aMoving;
+
+	state = game->stateMoving;
 }
 
 
 
 void Enemy::update() {
 	// Actualizar la animación
-	animation->update();
+	bool endAnimation = animation->update();
+	
+	if (endAnimation) { // Terminó la animación
+		
+		if (state == game->stateDying) { // Estaba muriendo
+			state = game->stateDead;
+		}
+	}
 
-	x = x + vx;
-	/*if (x - (width / 2) <= 0) {
-		vx = vx * -1;
-	}*/
+	if (state == game->stateMoving) { // Moviendo
+		animation = aMoving;
+	}
+	if (state == game->stateDying) { // Muriendo
+		animation = aDying;
+	}
+
+	if (state != game->stateDying) { // Si no se está muriendo...
+		x = x + vx;
+		if (x - (width / 2) <= 0) {
+			vx = vx * -1;
+		}
+	}
+
 }
 
 void Enemy::draw() {
 	animation->draw(x,y);
+}
+
+void Enemy::impacted() {
+	if (state != game->stateDying) {
+		state = game->stateDying;
+	}
 }

@@ -33,7 +33,7 @@ void GameLayer::init() {
 	destroyProjectiles();
 
 	player = new Player(50, 50, game);
-	background = new Background("res/fondo.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
+	background = new Background("res/fondo_2.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
 	
 
 	// Enemigos
@@ -198,14 +198,18 @@ void GameLayer::update() {
 				// Incrementar puntuación
 				points++;
 				textPoints->content = to_string(points);
-				/*markProjectileForDelete(projectile, deleteProjectiles);
-				markEnemyForDelete(enemy, deleteEnemies);*/
-
-				markActorForDelete(projectile, deleteProjectiles);
+				markProjectileForDelete(projectile, deleteProjectiles);
+				//markEnemyForDelete(enemy, deleteEnemies);
+				enemy->impacted();
 			}
 		}
 	}
 
+	for (auto const& enemy : enemies) { // Marcamos para eliminar aquellos enemigos en el estado muerto.
+		if (enemy->state == game->stateDead) {
+			markEnemyForDelete(enemy, deleteEnemies);
+		}
+	}
 
 	// Eliminamos los proyectiles y enemigos necesarios
 	for (auto const& delEnemy : deleteEnemies) {
@@ -221,9 +225,9 @@ void GameLayer::update() {
 	deleteProjectiles.clear();
 
 	// Información
-	cout << "Killed Enemies: " << killedEnemies 
+	/*cout << "Killed Enemies: " << killedEnemies 
 		 << " Current enemies: " << enemies.size() 
-		 << " Shoots: " << projectiles.size() << endl;
+		 << " Shoots: " << projectiles.size() << endl;*/
 }
 
 
