@@ -11,10 +11,11 @@ GameLayer::GameLayer(Game* game)
 }
 
 void GameLayer::init() {
-
+	// Puntuación
 	points = 0;
 	textPoints = new Text("hola", WIDTH * 0.92, HEIGHT * 0.05, game);
 	textPoints->content = to_string(points);
+	backgroundPoints = new Actor("res/icono_puntos.png", WIDTH * 0.85, HEIGHT * 0.05, 24, 24, game);
 
 	// Destruir posibles objetos existentes
 	delete player;
@@ -23,7 +24,7 @@ void GameLayer::init() {
 
 	player = new Player(50, 50, game);
 	background = new Background("res/fondo.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
-	backgroundPoints = new Actor("res/icono_puntos.png", WIDTH*0.85, HEIGHT*0.05, 24, 24, game);
+	
 
 	// Enemigos
 	enemies.clear(); // Vaciar la lista de enemigos, por si se reinicia el juego
@@ -142,6 +143,10 @@ void GameLayer::keysToControls(SDL_Event event) {
 	}
 }
 
+
+/**
+* Método encargado de actualizar todos los elementos del juego.
+**/
 void GameLayer::update() {
 
 	list<Enemy*> deleteEnemies; // Enemigos a eliminar
@@ -230,6 +235,7 @@ void GameLayer::draw() {
 
 
 // Métodos privados
+// **********************************************************************************
 
 void markEnemyForDelete(Enemy* enemy, list<Enemy*>& deleteList) {
 	bool inList = std::find(deleteList.begin(),
@@ -247,6 +253,13 @@ void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteLi
 	if (!inList) {
 		deleteList.push_back(projectile);
 	}
+}
+
+// Molaría a esto
+// markActorForDelete(projectile, deleteProjectiles);
+// markActorForDelete(enemy, deleteEnemies);
+void markActorForDelete(Actor* actor, list<Actor*>& deleteList) {
+
 }
 
 
@@ -275,3 +288,4 @@ void GameLayer::destroyProjectiles() {
 		delete projectile;
 	}
 }
+

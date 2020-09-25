@@ -5,7 +5,7 @@ Animation::Animation(string filename, float actorWidth, float actorHeight,
 	float fileWidth, float fileHeight, int updateFrequence,
 	int totalFrames, Game* game) {
 
-	// Cargar la textura de la cache de texturas
+	// Cargar la textura de la caché de texturas
 	//SDL_Surface* surface = IMG_Load(filename.c_str());
 	//texture = SDL_CreateTextureFromSurface(game->renderer, surface);
 	texture = game->getTexture(filename);

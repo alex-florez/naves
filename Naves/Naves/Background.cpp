@@ -27,7 +27,7 @@ void Background::update() {
 		// Se sale por la derecha
 		if (x - width / 2 > WIDTH) {
 			// vuelve a aparecer por la izquierda
-			x = 0 + width / 2;
+			x = 0 - width / 2;
 		}
 	}
 }

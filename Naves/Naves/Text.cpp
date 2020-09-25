@@ -11,9 +11,9 @@ Text::Text(string content, float x, float y, Game* game) {
 void Text::draw() {
 	SDL_Color color;
 	color.r = 255;
-	color.g = 255;
+	color.g = 145;
 	color.b = 255;
-	color.a = 255; // Transparente
+	color.a = 255; // Transparencia: 255 -> Opaco
 
 	SDL_Surface* surface = TTF_RenderText_Blended(game->font, content.c_str(), color);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(game->renderer, surface);

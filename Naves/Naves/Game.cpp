@@ -74,6 +74,9 @@ void Game::scale() {
 		// Cambiar escala del render
 		SDL_RenderSetScale(renderer, 1, 1);
 	}
+
+	// Para centrar la pantalla
+	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 }
 
 SDL_Texture* Game::getTexture(string filename) {
