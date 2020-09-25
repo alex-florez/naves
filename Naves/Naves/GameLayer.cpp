@@ -4,6 +4,16 @@
 void markEnemyForDelete(Enemy* enemy, list<Enemy*>& deleteList);
 void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteList);
 
+template <class T>
+void markActorForDelete(T* actor, const list<T*>& deleteList) {
+	bool inList = std::find(deleteList.begin(),
+		deleteList.end(),
+		actor) != deleteList.end();
+	if (!inList) {
+		deleteList.push_back(actor);
+	}
+}
+
 
 GameLayer::GameLayer(Game* game)
 	: Layer(game) { // Se hace una llamada al constructor del padre
@@ -188,8 +198,10 @@ void GameLayer::update() {
 				// Incrementar puntuación
 				points++;
 				textPoints->content = to_string(points);
-				markProjectileForDelete(projectile, deleteProjectiles);
-				markEnemyForDelete(enemy, deleteEnemies);
+				/*markProjectileForDelete(projectile, deleteProjectiles);
+				markEnemyForDelete(enemy, deleteEnemies);*/
+
+				markActorForDelete(projectile, deleteProjectiles);
 			}
 		}
 	}
@@ -255,12 +267,10 @@ void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteLi
 	}
 }
 
-// Molaría a esto
+// Molaría esto
 // markActorForDelete(projectile, deleteProjectiles);
 // markActorForDelete(enemy, deleteEnemies);
-void markActorForDelete(Actor* actor, list<Actor*>& deleteList) {
 
-}
 
 
 void GameLayer::addNewEnemy() {

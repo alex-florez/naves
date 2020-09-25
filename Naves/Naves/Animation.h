@@ -7,7 +7,7 @@ class Animation
 public:
 	Animation(string filename, float actorWidth, float actorHeight,
 				float fileWidth, float fileHeight, int updateFrequence,
-					int totalFrames, Game* game);
+					int totalFrames, bool loop, Game* game);
 
 	bool update();
 	void draw(float x, float y);
@@ -17,6 +17,7 @@ public:
 	int fileHeight; // Alto del Sprite Sheet
 	int currentFrame;
 	int totalFrames;
+	bool loop;
 	Game* game;
 
 	// Variables auxiliares
@@ -26,5 +27,6 @@ public:
 	float frameHeight; // Alto de un fotograma
 	int updateFrequence = 0;
 	int updateTime = 0;
+
 };
 
