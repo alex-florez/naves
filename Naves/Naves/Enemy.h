@@ -5,6 +5,8 @@
 #include "EnemyProjectile.h"
 
 #define ENEMY_SPEED 2
+#define MIN_SHOOT_CADENCE 55
+#define MAX_SHOOT_CADENCE 80
 
 class Enemy : public Actor
 {
@@ -18,7 +20,7 @@ public:
 	Animation* animation; // Referencia a la animación actual.
 
 	// Cadencia de disparo del enemigo
-	int shootCadence = 80;
+	int shootCadence;
 	int shootTime = shootCadence / 2;
 };
 

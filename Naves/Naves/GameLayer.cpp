@@ -323,7 +323,7 @@ void GameLayer::addNewEnemy() {
 			// Random position
 			int rX = (rand() % (600 - 500)) + 1 + 500;
 			int rY = (rand() % (300 - 60)) + 1 + 60;
-			enemies.push_back(new Enemy(rX + 2 * numEnemies, rY, game));
+			enemies.push_back(new Enemy(rX + 4 * numEnemies, rY, game));
 		}
 		newEnemyTime = ENEMY_SPAWN_TIME + 2*(numEnemies + n);
 	}

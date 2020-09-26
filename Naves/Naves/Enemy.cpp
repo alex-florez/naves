@@ -8,6 +8,9 @@ Enemy::Enemy(float x, float y, Game* game)
 	aMoving = new Animation("res/enemigo_movimiento.png", width, height,
 								108, 40, 6, 3, game);
 	animation = aMoving;
+
+	// Cadencia de disparo aleatoria
+	shootCadence = (rand() % (MAX_SHOOT_CADENCE - MIN_SHOOT_CADENCE)) + 1 + MIN_SHOOT_CADENCE;
 }
 
 
