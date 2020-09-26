@@ -209,9 +209,9 @@ void GameLayer::update() {
 	deleteProjectiles.clear();
 
 	// Información
-	cout << "Killed Enemies: " << killedEnemies 
-		 << " Current enemies: " << enemies.size() 
-		 << " Shoots: " << projectiles.size() << endl;
+	cout << "Killed Enemies: " << killedEnemies
+		<< " Current enemies: " << enemies.size()
+		<< " Shoots: " << projectiles.size() << endl;
 }
 
 
@@ -265,15 +265,16 @@ void markActorForDelete(Actor* actor, list<Actor*>& deleteList) {
 
 void GameLayer::addNewEnemy() {
 	newEnemyTime--;
+	int n = enemies.size();
+	int numEnemies = (killedEnemies / ENEMY_SPAWN_FREQUENCY) + 1;
 	if (newEnemyTime <= 0) {
-		for (int i = 0; i < (killedEnemies / ENEMY_SPAWN_FREQUENCY) + 1; i++) {
-			cout << "New enemy spawned" << endl;
+		for (int i = 0; i < numEnemies; i++) {
 			// Random position
 			int rX = (rand() % (600 - 500)) + 1 + 500;
 			int rY = (rand() % (300 - 60)) + 1 + 60;
-			enemies.push_back(new Enemy(rX, rY, game));
+			enemies.push_back(new Enemy(rX + 2 * numEnemies, rY, game));
 		}
-		newEnemyTime = ENEMY_SPAWN_TIME;
+		newEnemyTime = ENEMY_SPAWN_TIME + 2*numEnemies;
 	}
 }
 

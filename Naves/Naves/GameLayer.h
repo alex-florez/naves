@@ -11,7 +11,7 @@
 #include <list>
 
 #define ENEMY_SPAWN_TIME 110
-#define ENEMY_SPAWN_FREQUENCY 5		
+#define ENEMY_SPAWN_FREQUENCY 4		
 
 
 class GameLayer : public Layer
@@ -40,6 +40,7 @@ public:
 
 	int newEnemyTime = 0;
 	int killedEnemies = 0;
+
 
 	// Puntuación
 	Text* textPoints;
