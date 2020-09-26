@@ -25,3 +25,13 @@ void Enemy::update() {
 void Enemy::draw() {
 	animation->draw(x,y);
 }
+
+EnemyProjectile* Enemy::autoShoot() {
+	shootTime--;
+
+	if (shootTime <= 0) {
+		shootTime = shootCadence;
+		return new EnemyProjectile(x - width/2, y, game);
+	}
+	return nullptr;
+}

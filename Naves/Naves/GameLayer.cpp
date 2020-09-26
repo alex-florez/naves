@@ -3,6 +3,7 @@
 
 void markEnemyForDelete(Enemy* enemy, list<Enemy*>& deleteList);
 void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteList);
+void markEnemyProjectileForDelete(EnemyProjectile* eProjetile, list<EnemyProjectile*>& deleteList);
 
 
 GameLayer::GameLayer(Game* game)
@@ -21,6 +22,7 @@ void GameLayer::init() {
 	delete player;
 	destroyEnemies();
 	destroyProjectiles();
+	destroyEnemyProjectiles();
 
 	player = new Player(50, 50, game);
 	background = new Background("res/fondo.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
@@ -31,6 +33,9 @@ void GameLayer::init() {
 
 	// Proyectiles
 	projectiles.clear();
+
+	// Proyectiles de los enemigos
+	enemyProjectiles.clear();
 
 	// Enemigos eliminados
 	killedEnemies = 0;
@@ -151,6 +156,7 @@ void GameLayer::update() {
 
 	list<Enemy*> deleteEnemies; // Enemigos a eliminar
 	list<Projectile*> deleteProjectiles; // Proyectiles a eliminar
+	list<EnemyProjectile*> deleteEnemyProjectiles; // Proyectiles del enemigo a eliminar
 
 	// Actualizamos el fondo móvil
 	background->update();
@@ -162,21 +168,40 @@ void GameLayer::update() {
 	// Actualizamos los enemigos
 	for (auto const& enemy : enemies) {
 		enemy->update();
-		// Enemigo a la izquierda de la pantalla
-		if (enemy->x + enemy->width/2 <= 0) { 
+		if (enemy->x + enemy->width/2 <= 0) {  // Enemigo a la izquierda de la pantalla
 			markEnemyForDelete(enemy, deleteEnemies);
 		} else if (player->isOverlap(enemy)) { // Colisión con el jugador
 			init();
 			return; // Se reinicia el juego.
 		}
+		// El enemigo realiza un disparo, solo si está dentro del render
+		if (enemy->isInRender()) {
+			EnemyProjectile* eProjectile = enemy->autoShoot();
+			if (eProjectile != nullptr) {
+				enemyProjectiles.push_back(eProjectile);
+			}
+		}		
 	}
 	// Actualizamos los proyectiles
 	for (auto const& projectile : projectiles) {
 		projectile->update();
-		// Proyectil a la derecha de la pantalla
+		// Proyectil fuera de la pantalla
 		if (!projectile->isInRender()) {
 			markProjectileForDelete(projectile, deleteProjectiles);
 		}
+	}
+
+	// Actualizar proyectiles del enemigo
+	for (auto const& eProjectile : enemyProjectiles) {
+		eProjectile->update();
+		if (!eProjectile->isInRender()) { // Proyectil fuera del render
+			markEnemyProjectileForDelete(eProjectile, deleteEnemyProjectiles);
+		}
+		else if (player->isOverlap(eProjectile)) { // Colisiones entre jugador y proyectiles enemigos
+			init();
+			return;
+		}
+			
 	}
 
 	// Colisiones entre enemigos y proyectiles
@@ -195,6 +220,11 @@ void GameLayer::update() {
 	}
 
 
+
+
+	// Eliminación de elementos del juego
+	// **********************************
+
 	// Eliminamos los proyectiles y enemigos necesarios
 	for (auto const& delEnemy : deleteEnemies) {
 		enemies.remove(delEnemy);
@@ -207,6 +237,13 @@ void GameLayer::update() {
 		delete delProjectile; // Se destruye el proyectil.
 	}
 	deleteProjectiles.clear();
+
+	// Eliminamos los proyectiles enemigos necesarios
+	for (EnemyProjectile* eProjectile : deleteEnemyProjectiles) {
+		enemyProjectiles.remove(eProjectile);
+		delete eProjectile;
+	}
+	deleteEnemyProjectiles.clear();
 
 	// Información
 	cout << "Killed Enemies: " << killedEnemies
@@ -225,6 +262,10 @@ void GameLayer::draw() {
 	// Dibujamos los proyectiles
 	for (auto const& projectile : projectiles) {
 		projectile->draw();
+	}
+	// Se dibujan los proyectiles del enemigo
+	for (auto const& eProjectile : enemyProjectiles) {
+		eProjectile->draw();
 	}
 
 	textPoints->draw();
@@ -255,6 +296,16 @@ void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteLi
 	}
 }
 
+void markEnemyProjectileForDelete(EnemyProjectile* eProjetile, list<EnemyProjectile*>& deleteList) {
+	bool inList = std::find(deleteList.begin(),
+		deleteList.end(),
+		eProjetile) != deleteList.end();
+	if (!inList) {
+		deleteList.push_back(eProjetile);
+	}
+}
+
+
 // Molaría a esto
 // markActorForDelete(projectile, deleteProjectiles);
 // markActorForDelete(enemy, deleteEnemies);
@@ -265,10 +316,10 @@ void markActorForDelete(Actor* actor, list<Actor*>& deleteList) {
 
 void GameLayer::addNewEnemy() {
 	newEnemyTime--;
-	int n = enemies.size();
+	int n = enemies.size(); // Nº actual de enemigos
 	int numEnemies = (killedEnemies / ENEMY_SPAWN_FREQUENCY) + 1;
 	if (newEnemyTime <= 0) {
-		for (int i = 0; i < numEnemies; i++) {
+		for (int i = 0; i < numEnemies; i++) { // Crear nº de enemigos definido por la función
 			// Random position
 			int rX = (rand() % (600 - 500)) + 1 + 500;
 			int rY = (rand() % (300 - 60)) + 1 + 60;
@@ -277,6 +328,9 @@ void GameLayer::addNewEnemy() {
 		newEnemyTime = ENEMY_SPAWN_TIME + 2*(numEnemies + n);
 	}
 }
+
+// Métodos encargados de destruir objetos en memoria
+// *************************************************
 
 void GameLayer::destroyEnemies() {
 	for (auto const& enemy : enemies) {
@@ -290,3 +344,8 @@ void GameLayer::destroyProjectiles() {
 	}
 }
 
+void GameLayer::destroyEnemyProjectiles() {
+	for (auto const& eProjectile : enemyProjectiles) {
+		delete eProjectile;
+	}
+}

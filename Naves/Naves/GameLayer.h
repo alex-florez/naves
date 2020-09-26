@@ -5,6 +5,7 @@
 #include "Background.h"
 #include "Enemy.h"
 #include "Projectile.h"
+#include "EnemyProjectile.h"
 #include "Text.h"
 #include "Audio.h"
 
@@ -37,6 +38,8 @@ public:
 	list<Enemy*> enemies;
 	// Lista de proyectiles
 	list<Projectile*> projectiles;
+	// Lista de proyectiles enemigos
+	list<EnemyProjectile*> enemyProjectiles;
 
 	int newEnemyTime = 0;
 	int killedEnemies = 0;
@@ -52,5 +55,6 @@ private:
 	void addNewEnemy();
 	void destroyEnemies();
 	void destroyProjectiles();
+	void destroyEnemyProjectiles();
 };
 
