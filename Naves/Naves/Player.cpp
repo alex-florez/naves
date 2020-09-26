@@ -4,6 +4,7 @@ Player::Player(float x, float y, Game* game)
 	: Actor("res/jugador_nave.png", x, y, 50, 57, game) {
 
 	audioShoot = new Audio("res/efecto_disparo.wav", false);
+	audioImpact = new Audio("res/efecto_explosion.wav", false);
 }
 
 void Player::update() {
@@ -30,4 +31,10 @@ Projectile* Player::shoot() {
 		return new Projectile(x + width/2, y, game);
 	}
 	return NULL;
+}
+
+bool Player::impact() {
+	audioImpact->play();
+	lifes--;
+	return lifes <= 0;
 }

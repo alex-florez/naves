@@ -27,7 +27,10 @@ public:
 
 	Player* player;
 	Background* background;
+
+	// HUD
 	Actor* backgroundPoints;
+	Actor* backgroundLifes;
 
 	// Controles
 	bool controlShoot = false;
@@ -49,6 +52,9 @@ public:
 	Text* textPoints;
 	int points;
 
+	// Vidas
+	Text* textLifes;
+
 	// Audio
 	Audio* audioBackground;
 private:
@@ -56,5 +62,6 @@ private:
 	void destroyEnemies();
 	void destroyProjectiles();
 	void destroyEnemyProjectiles();
+	bool playerImpacted();
 };
 

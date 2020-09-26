@@ -18,6 +18,10 @@ void GameLayer::init() {
 	textPoints->content = to_string(points);
 	backgroundPoints = new Actor("res/icono_puntos.png", WIDTH * 0.85, HEIGHT * 0.05, 24, 24, game);
 
+	// Vidas
+	textLifes = new Text(to_string(PLAYER_LIFES), WIDTH * 0.77, HEIGHT * 0.05, game);
+	backgroundLifes = new Actor("res/heart.png", WIDTH * 0.7, HEIGHT * 0.05, 24, 24, game);
+
 	// Destruir posibles objetos existentes
 	delete player;
 	destroyEnemies();
@@ -171,8 +175,11 @@ void GameLayer::update() {
 		if (enemy->x + enemy->width/2 <= 0) {  // Enemigo a la izquierda de la pantalla
 			markEnemyForDelete(enemy, deleteEnemies);
 		} else if (player->isOverlap(enemy)) { // Colisión con el jugador
-			init();
-			return; // Se reinicia el juego.
+			markEnemyForDelete(enemy, deleteEnemies); // Se elimina el enemigo
+			if (playerImpacted()) { // Se reinicia el juego, si ya no quedan vidas.
+				init();
+				return; 
+			}
 		}
 		// El enemigo realiza un disparo, solo si está dentro del render
 		if (enemy->isInRender()) {
@@ -198,8 +205,11 @@ void GameLayer::update() {
 			markEnemyProjectileForDelete(eProjectile, deleteEnemyProjectiles);
 		}
 		else if (player->isOverlap(eProjectile)) { // Colisiones entre jugador y proyectiles enemigos
-			init();
-			return;
+			markEnemyProjectileForDelete(eProjectile, deleteEnemyProjectiles); // Se elimina el proyectil
+			if (playerImpacted()) {
+				init();
+				return;
+			}
 		}
 			
 	}
@@ -270,6 +280,8 @@ void GameLayer::draw() {
 
 	textPoints->draw();
 	backgroundPoints->draw();
+	textLifes->draw();
+	backgroundLifes->draw();
 
 	SDL_RenderPresent(game->renderer); // Renderiza el juego
 }
@@ -348,4 +360,11 @@ void GameLayer::destroyEnemyProjectiles() {
 	for (auto const& eProjectile : enemyProjectiles) {
 		delete eProjectile;
 	}
+}
+
+
+bool GameLayer::playerImpacted() {
+	bool end = player->impact();
+	textLifes->content = to_string(player->lifes);
+	return end;
 }
