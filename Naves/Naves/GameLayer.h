@@ -5,6 +5,7 @@
 #include "Background.h"
 #include "Enemy.h"
 #include "Projectile.h"
+#include "Bomb.h"
 #include "Text.h"
 #include "Audio.h"
 
@@ -12,6 +13,8 @@
 
 #define ENEMY_SPAWN_TIME 110
 #define ENEMY_SPAWN_FREQUENCY 5		
+
+#define BOMB_SPAWN_TIME 500
 
 
 class GameLayer : public Layer
@@ -37,8 +40,14 @@ public:
 	list<Enemy*> enemies;
 	// Lista de proyectiles
 	list<Projectile*> projectiles;
+	// Lista de bombas
+	list<Bomb*> bombs;
 
+	// Variables para controlar el spawn de items
 	int newEnemyTime = 0;
+	int newBombTime = BOMB_SPAWN_TIME;
+
+
 	int killedEnemies = 0;
 
 	// Puntuación
@@ -49,6 +58,7 @@ public:
 	Audio* audioBackground;
 private:
 	void addNewEnemy();
+	void addNewBomb();
 	void destroyEnemies();
 	void destroyProjectiles();
 };

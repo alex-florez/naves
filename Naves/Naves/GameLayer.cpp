@@ -3,6 +3,7 @@
 
 void markEnemyForDelete(Enemy* enemy, list<Enemy*>& deleteList);
 void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteList);
+void markBombForDelete(Bomb* bomb, list<Bomb*>& deleteList);
 
 
 GameLayer::GameLayer(Game* game)
@@ -31,6 +32,12 @@ void GameLayer::init() {
 
 	// Proyectiles
 	projectiles.clear();
+
+	// Items
+	bombs.clear();
+
+	newEnemyTime = 0;
+	newBombTime = BOMB_SPAWN_TIME;
 
 	// Enemigos eliminados
 	killedEnemies = 0;
@@ -151,12 +158,16 @@ void GameLayer::update() {
 
 	list<Enemy*> deleteEnemies; // Enemigos a eliminar
 	list<Projectile*> deleteProjectiles; // Proyectiles a eliminar
+	list<Bomb*> deleteBombs; // bombas a elliminar
 
 	// Actualizamos el fondo móvil
 	background->update();
 
 	// Generamos los enemigos
 	addNewEnemy();
+
+	// Generamos los items
+	addNewBomb();
 
 	player->update();
 	// Actualizamos los enemigos
@@ -194,6 +205,16 @@ void GameLayer::update() {
 		}
 	}
 
+	// Colisiones entre Player y items
+	for (auto const& bomb : bombs) {
+		if (player->isOverlap(bomb)) {
+			markBombForDelete(bomb, deleteBombs);
+			enemies.clear();
+		}
+	}
+
+
+
 
 	// Eliminamos los proyectiles y enemigos necesarios
 	for (auto const& delEnemy : deleteEnemies) {
@@ -207,6 +228,12 @@ void GameLayer::update() {
 		delete delProjectile; // Se destruye el proyectil.
 	}
 	deleteProjectiles.clear();
+
+	for (auto const& bomb : deleteBombs) {
+		bombs.remove(bomb);
+		delete bomb;
+	}
+	deleteBombs.clear();
 
 	// Información
 	cout << "Killed Enemies: " << killedEnemies 
@@ -225,6 +252,11 @@ void GameLayer::draw() {
 	// Dibujamos los proyectiles
 	for (auto const& projectile : projectiles) {
 		projectile->draw();
+	}
+
+	// Dibujamos los items
+	for (auto const& bomb : bombs) {
+		bomb->draw();
 	}
 
 	textPoints->draw();
@@ -255,6 +287,15 @@ void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteLi
 	}
 }
 
+void markBombForDelete(Bomb* bomb, list<Bomb*>& deleteList) {
+	bool inList = std::find(deleteList.begin(),
+		deleteList.end(),
+		bomb) != deleteList.end();
+	if (!inList) {
+		deleteList.push_back(bomb);
+	}
+}
+
 // Molaría a esto
 // markActorForDelete(projectile, deleteProjectiles);
 // markActorForDelete(enemy, deleteEnemies);
@@ -277,6 +318,17 @@ void GameLayer::addNewEnemy() {
 	}
 }
 
+void GameLayer::addNewBomb() {
+	newBombTime--;
+
+	if (newBombTime <= 0 && bombs.size() == 0) {
+		int rX = (rand() % (WIDTH / 2)) + WIDTH / 2;
+		int rY = (rand() % (HEIGHT - 20)) + 20;
+		bombs.push_back(new Bomb(rX, rY, game));
+		newBombTime = BOMB_SPAWN_TIME;
+	}
+}
+
 void GameLayer::destroyEnemies() {
 	for (auto const& enemy : enemies) {
 		delete enemy;
@@ -288,4 +340,6 @@ void GameLayer::destroyProjectiles() {
 		delete projectile;
 	}
 }
+
+
 
