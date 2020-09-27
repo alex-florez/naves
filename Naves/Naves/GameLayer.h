@@ -8,6 +8,7 @@
 #include "EnemyProjectile.h"
 #include "Text.h"
 #include "Audio.h"
+#include "HealthBar.h"
 
 #include <list>
 
@@ -31,6 +32,7 @@ public:
 	// HUD
 	Actor* backgroundPoints;
 	Actor* backgroundLifes;
+	HealthBar* healthBar;
 
 	// Controles
 	bool controlShoot = false;

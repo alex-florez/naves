@@ -34,7 +34,7 @@ Projectile* Player::shoot() {
 }
 
 bool Player::impact() {
-	audioImpact->play();
+	audioImpact->play(); // Efecto de sonido.
 	lifes--;
 	return lifes <= 0;
 }

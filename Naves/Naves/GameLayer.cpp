@@ -19,8 +19,7 @@ void GameLayer::init() {
 	backgroundPoints = new Actor("res/icono_puntos.png", WIDTH * 0.85, HEIGHT * 0.05, 24, 24, game);
 
 	// Vidas
-	textLifes = new Text(to_string(PLAYER_LIFES), WIDTH * 0.77, HEIGHT * 0.05, game);
-	backgroundLifes = new Actor("res/heart.png", WIDTH * 0.7, HEIGHT * 0.05, 24, 24, game);
+	healthBar = new HealthBar(WIDTH * 0.7, HEIGHT * 0.05, game);
 
 	// Destruir posibles objetos existentes
 	delete player;
@@ -165,6 +164,9 @@ void GameLayer::update() {
 	// Actualizamos el fondo móvil
 	background->update();
 
+	// Actualizamos la UI
+	healthBar->update();
+
 	// Generamos los enemigos
 	addNewEnemy();
 
@@ -280,8 +282,7 @@ void GameLayer::draw() {
 
 	textPoints->draw();
 	backgroundPoints->draw();
-	textLifes->draw();
-	backgroundLifes->draw();
+	healthBar->draw();
 
 	SDL_RenderPresent(game->renderer); // Renderiza el juego
 }
@@ -362,9 +363,14 @@ void GameLayer::destroyEnemyProjectiles() {
 	}
 }
 
-
+/*
+	Método invocado cuando el actor Player
+	es impactado por un proyectil enemigo o por una
+	nave enemiga. Devuelve true si el jugador se ha quedado
+	sin vidas.
+*/
 bool GameLayer::playerImpacted() {
-	bool end = player->impact();
-	textLifes->content = to_string(player->lifes);
-	return end;
+	bool noLifes = player->impact();
+	healthBar->setLifes(player->lifes); // Actualizar vidas en la UI
+	return noLifes;
 }
