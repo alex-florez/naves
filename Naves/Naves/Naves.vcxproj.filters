@@ -72,6 +72,9 @@
     <ClCompile Include="AmmoUI.cpp">
       <Filter>Archivos de origen\Actors</Filter>
     </ClCompile>
+    <ClCompile Include="AmmoCollectable.cpp">
+      <Filter>Archivos de origen\Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -114,6 +117,9 @@
       <Filter>Archivos de encabezado\Actors</Filter>
     </ClInclude>
     <ClInclude Include="AmmoUI.h">
+      <Filter>Archivos de encabezado\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="AmmoCollectable.h">
       <Filter>Archivos de encabezado\Actors</Filter>
     </ClInclude>
   </ItemGroup>

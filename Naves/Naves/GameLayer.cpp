@@ -4,6 +4,7 @@
 void markEnemyForDelete(Enemy* enemy, list<Enemy*>& deleteList);
 void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteList);
 void markEnemyProjectileForDelete(EnemyProjectile* eProjetile, list<EnemyProjectile*>& deleteList);
+void markAmmoCollectableForDelete(AmmoCollectable* ammoCollectable, list<AmmoCollectable*>& deletelist);
 
 
 GameLayer::GameLayer(Game* game)
@@ -27,6 +28,7 @@ void GameLayer::init() {
 	destroyEnemies();
 	destroyProjectiles();
 	destroyEnemyProjectiles();
+	destroyAmmoCollectables();
 
 	player = new Player(50, 50, game);
 	background = new Background("res/fondo.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
@@ -40,6 +42,10 @@ void GameLayer::init() {
 
 	// Proyectiles de los enemigos
 	enemyProjectiles.clear();
+
+	// Elementos recolectables
+	ammoCollectables.clear();
+
 
 	// Enemigos eliminados
 	killedEnemies = 0;
@@ -161,6 +167,7 @@ void GameLayer::update() {
 	list<Enemy*> deleteEnemies; // Enemigos a eliminar
 	list<Projectile*> deleteProjectiles; // Proyectiles a eliminar
 	list<EnemyProjectile*> deleteEnemyProjectiles; // Proyectiles del enemigo a eliminar
+	list<AmmoCollectable*> deleteAmmoCollectables; // Coleccionables de munición a eliminar
 
 	// Actualizamos el fondo móvil
 	background->update();
@@ -171,6 +178,9 @@ void GameLayer::update() {
 
 	// Generamos los enemigos
 	addNewEnemy();
+
+	// Generamos los recolectables
+	addNewAmmoCollectable();
 
 	player->update();
 	// Actualizamos los enemigos
@@ -234,7 +244,13 @@ void GameLayer::update() {
 		}
 	}
 
-
+	// Colisiones del jugador con elementos recolectables
+	for (auto const& ammoCollectable : ammoCollectables) {
+		if (player->isOverlap(ammoCollectable)) { // Jugador recoge munición
+			player->addAmmo(ammoCollectable->ammoValue); // Se incrementa el número de disparos
+			markAmmoCollectableForDelete(ammoCollectable, deleteAmmoCollectables); // Se elimina el recolectable.
+		}
+	}
 
 
 	// Eliminación de elementos del juego
@@ -260,6 +276,13 @@ void GameLayer::update() {
 	}
 	deleteEnemyProjectiles.clear();
 
+	// Eliminamos elementos recolectables
+	for (auto const& ammoCollectable : deleteAmmoCollectables) {
+		ammoCollectables.remove(ammoCollectable);
+		delete ammoCollectable;
+	}
+	deleteAmmoCollectables.clear();
+
 	// Información
 	cout << "Killed Enemies: " << killedEnemies
 		<< " Current enemies: " << enemies.size()
@@ -281,6 +304,11 @@ void GameLayer::draw() {
 	// Se dibujan los proyectiles del enemigo
 	for (auto const& eProjectile : enemyProjectiles) {
 		eProjectile->draw();
+	}
+
+	// Dibujamos elementos coleccionables
+	for (auto const& ammoCollectable : ammoCollectables) {
+		ammoCollectable->draw();
 	}
 
 	// Dibujamos elementos de la UI
@@ -323,6 +351,15 @@ void markEnemyProjectileForDelete(EnemyProjectile* eProjetile, list<EnemyProject
 	}
 }
 
+void markAmmoCollectableForDelete(AmmoCollectable* ammoCollectable, list<AmmoCollectable*>& deleteList) {
+	bool inList = std::find(deleteList.begin(),
+		deleteList.end(),
+		ammoCollectable) != deleteList.end();
+	if (!inList) {
+		deleteList.push_back(ammoCollectable);
+	}
+}
+
 
 // Molaría a esto
 // markActorForDelete(projectile, deleteProjectiles);
@@ -347,6 +384,18 @@ void GameLayer::addNewEnemy() {
 	}
 }
 
+
+void GameLayer::addNewAmmoCollectable() {
+	newAmmoCollectableTime--;
+
+	if (newAmmoCollectableTime <= 0) {
+		int rX = (rand() % (WIDTH - WIDTH / 2)) + 1 + WIDTH/2;
+		int rY = (rand() % (HEIGHT-18-18)) + 1 + 18;
+		ammoCollectables.push_back(new AmmoCollectable(10, rX, rY, game));
+		newAmmoCollectableTime = AMMO_COLLECTABLE_SPAWN_TIME;
+	}
+}
+
 // Métodos encargados de destruir objetos en memoria
 // *************************************************
 
@@ -365,6 +414,12 @@ void GameLayer::destroyProjectiles() {
 void GameLayer::destroyEnemyProjectiles() {
 	for (auto const& eProjectile : enemyProjectiles) {
 		delete eProjectile;
+	}
+}
+
+void GameLayer::destroyAmmoCollectables() {
+	for (auto const& ammoCollectable : ammoCollectables) {
+		delete ammoCollectable;
 	}
 }
 

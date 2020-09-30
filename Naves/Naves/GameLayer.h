@@ -10,12 +10,15 @@
 #include "Audio.h"
 #include "HealthBar.h"
 #include "AmmoUI.h"
+#include "AmmoCollectable.h"
 
 #include <list>
 
 #define ENEMY_SPAWN_TIME 110
-#define ENEMY_SPAWN_FREQUENCY 4		
+#define ENEMY_SPAWN_FREQUENCY 4	
 
+// Frecuencia de aparición de elementos coleccionables.
+#define AMMO_COLLECTABLE_SPAWN_TIME 250
 
 class GameLayer : public Layer
 {
@@ -47,9 +50,14 @@ public:
 	list<Projectile*> projectiles;
 	// Lista de proyectiles enemigos
 	list<EnemyProjectile*> enemyProjectiles;
+	// Elementos recolectables
+	list<AmmoCollectable*> ammoCollectables;
 
 	int newEnemyTime = 0;
 	int killedEnemies = 0;
+
+	// Tiempo para que aparezcan nuevos coleccionables
+	int newAmmoCollectableTime = AMMO_COLLECTABLE_SPAWN_TIME;
 
 
 	// Puntuación
@@ -61,9 +69,12 @@ public:
 	Audio* audioBackground;
 private:
 	void addNewEnemy();
+	void addNewAmmoCollectable();
+	bool playerImpacted();
+
 	void destroyEnemies();
 	void destroyProjectiles();
 	void destroyEnemyProjectiles();
-	bool playerImpacted();
+	void destroyAmmoCollectables();
 };
 
