@@ -6,7 +6,7 @@
 
 #define PLAYER_SPEED 5
 #define PLAYER_LIFES 3
-#define PLAYER_INITIAL_AMMO 5
+#define PLAYER_INITIAL_AMMO 3
 
 class Player : public Actor
 {

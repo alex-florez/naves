@@ -226,6 +226,8 @@ void GameLayer::update() {
 				// Incrementar puntuación
 				points++;
 				textPoints->content = to_string(points);
+				// Incrementar en uno la munición
+				player->addAmmo(1);
 				markProjectileForDelete(projectile, deleteProjectiles);
 				markEnemyForDelete(enemy, deleteEnemies);
 			}
