@@ -25,9 +25,10 @@ void Player::moveY(float axis) {
 }
 
 Projectile* Player::shoot() {
-	if (shootTime == 0) {
+	if (shootTime == 0 && ammo > 0) {
 		audioShoot->play(); // Efecto de sonido del disparo.
 		shootTime = shootCadence;
+		ammo--; // Decrementamos el número de disparos restantes
 		return new Projectile(x + width/2, y, game);
 	}
 	return NULL;
@@ -37,4 +38,8 @@ bool Player::impact() {
 	audioImpact->play(); // Efecto de sonido.
 	lifes--;
 	return lifes <= 0;
+}
+
+void Player::addAmmo(int extraAmmo) {
+	this->ammo += extraAmmo;
 }

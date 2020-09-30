@@ -9,6 +9,7 @@
 #include "Text.h"
 #include "Audio.h"
 #include "HealthBar.h"
+#include "AmmoUI.h"
 
 #include <list>
 
@@ -33,6 +34,7 @@ public:
 	Actor* backgroundPoints;
 	Actor* backgroundLifes;
 	HealthBar* healthBar;
+	AmmoUI* ammoUI;
 
 	// Controles
 	bool controlShoot = false;
@@ -54,8 +56,6 @@ public:
 	Text* textPoints;
 	int points;
 
-	// Vidas
-	Text* textLifes;
 
 	// Audio
 	Audio* audioBackground;

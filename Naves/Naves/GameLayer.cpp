@@ -18,8 +18,9 @@ void GameLayer::init() {
 	textPoints->content = to_string(points);
 	backgroundPoints = new Actor("res/icono_puntos.png", WIDTH * 0.85, HEIGHT * 0.05, 24, 24, game);
 
-	// Vidas
+	// Elementos de la UI
 	healthBar = new HealthBar(WIDTH * 0.7, HEIGHT * 0.05, game);
+	ammoUI = new AmmoUI(WIDTH * 0.55, HEIGHT * 0.05, game);
 
 	// Destruir posibles objetos existentes
 	delete player;
@@ -166,6 +167,7 @@ void GameLayer::update() {
 
 	// Actualizamos la UI
 	healthBar->update();
+	ammoUI->update(player->ammo);
 
 	// Generamos los enemigos
 	addNewEnemy();
@@ -213,7 +215,6 @@ void GameLayer::update() {
 				return;
 			}
 		}
-			
 	}
 
 	// Colisiones entre enemigos y proyectiles
@@ -280,9 +281,11 @@ void GameLayer::draw() {
 		eProjectile->draw();
 	}
 
+	// Dibujamos elementos de la UI
 	textPoints->draw();
 	backgroundPoints->draw();
 	healthBar->draw();
+	ammoUI->draw();
 
 	SDL_RenderPresent(game->renderer); // Renderiza el juego
 }
