@@ -75,6 +75,9 @@
     <ClCompile Include="AmmoCollectable.cpp">
       <Filter>Archivos de origen\Actors</Filter>
     </ClCompile>
+    <ClCompile Include="Spaceship.cpp">
+      <Filter>Archivos de origen\Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -120,6 +123,9 @@
       <Filter>Archivos de encabezado\Actors</Filter>
     </ClInclude>
     <ClInclude Include="AmmoCollectable.h">
+      <Filter>Archivos de encabezado\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Spaceship.h">
       <Filter>Archivos de encabezado\Actors</Filter>
     </ClInclude>
   </ItemGroup>

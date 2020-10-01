@@ -174,7 +174,7 @@ void GameLayer::update() {
 
 	// Actualizamos la UI
 	healthBar->update();
-	ammoUI->update(player->ammo);
+	ammoUI->update(player->getCurrentAmmo());
 
 	// Generamos los enemigos
 	addNewEnemy();
@@ -188,7 +188,7 @@ void GameLayer::update() {
 		enemy->update();
 		if (enemy->x + enemy->width/2 <= 0) {  // Enemigo a la izquierda de la pantalla
 			markEnemyForDelete(enemy, deleteEnemies);
-		} else if (player->isOverlap(enemy)) { // Colisión con el jugador
+		} else if (player->spaceship->isOverlap(enemy)) { // Colisión con el jugador
 			markEnemyForDelete(enemy, deleteEnemies); // Se elimina el enemigo
 			if (playerImpacted()) { // Se reinicia el juego, si ya no quedan vidas.
 				init();
@@ -218,7 +218,7 @@ void GameLayer::update() {
 		if (!eProjectile->isInRender()) { // Proyectil fuera del render
 			markEnemyProjectileForDelete(eProjectile, deleteEnemyProjectiles);
 		}
-		else if (player->isOverlap(eProjectile)) { // Colisiones entre jugador y proyectiles enemigos
+		else if (player->spaceship->isOverlap(eProjectile)) { // Colisiones entre jugador y proyectiles enemigos
 			markEnemyProjectileForDelete(eProjectile, deleteEnemyProjectiles); // Se elimina el proyectil
 			if (playerImpacted()) {
 				init();
@@ -246,7 +246,7 @@ void GameLayer::update() {
 
 	// Colisiones del jugador con elementos recolectables
 	for (auto const& ammoCollectable : ammoCollectables) {
-		if (player->isOverlap(ammoCollectable)) { // Jugador recoge munición
+		if (player->spaceship->isOverlap(ammoCollectable)) { // Jugador recoge munición
 			player->addAmmo(ammoCollectable->ammoValue); // Se incrementa el número de disparos
 			markAmmoCollectableForDelete(ammoCollectable, deleteAmmoCollectables); // Se elimina el recolectable.
 		}
@@ -292,7 +292,7 @@ void GameLayer::update() {
 
 void GameLayer::draw() {
 	background->draw();
-	player->draw();
+	player->spaceship->draw();
 	// Dibujamos los enemigos
 	for (auto const& enemy : enemies) {
 		enemy->draw();
@@ -389,6 +389,7 @@ void GameLayer::addNewAmmoCollectable() {
 	newAmmoCollectableTime--;
 
 	if (newAmmoCollectableTime <= 0) {
+		// Posición aleatoria para que aparezca en la mitad derecha del render
 		int rX = (rand() % (WIDTH - WIDTH / 2)) + 1 + WIDTH/2;
 		int rY = (rand() % (HEIGHT-18-18)) + 1 + 18;
 		ammoCollectables.push_back(new AmmoCollectable(10, rX, rY, game));

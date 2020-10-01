@@ -3,7 +3,7 @@
 
 AmmoUI::AmmoUI(float x, float y, Game* game)
 	: Actor("res/bullet-icon.png", x, y, 24, 24, game) {
-	ammo = PLAYER_INITIAL_AMMO;
+	ammo = 0;
 	textAmmo = new Text(to_string(ammo), x + 34, y, game);
 }
 

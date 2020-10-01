@@ -174,6 +174,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="Spaceship.cpp" />
     <ClCompile Include="Text.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -191,6 +192,7 @@
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="Spaceship.h" />
     <ClInclude Include="Text.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
