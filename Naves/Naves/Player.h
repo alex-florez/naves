@@ -3,6 +3,7 @@
 #include "Projectile.h"
 #include "Audio.h"
 #include "Spaceship.h"
+#include <map>
 
 #define PLAYER_LIFES 3
 
@@ -18,14 +19,17 @@ public:
 	bool impact();
 	void addAmmo(int ammo);
 	int getCurrentAmmo();
-
+	void changeSpaceship(string name); // Método para cambiar de nave
 
 	// Vidas del jugador
 	int lifes = PLAYER_LIFES;
-	
+
 
 	// Audio
 	Audio* audioImpact;
+
+	// Mapa de naves disponibles para el jugador
+	map<string, Spaceship*> availableSpaceships;
 
 	// Nave actual del jugador
 	Spaceship* spaceship;

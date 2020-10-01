@@ -104,6 +104,12 @@ void GameLayer::keysToControls(SDL_Event event) {
 			game->loopActive = false;
 			break;
 		case SDLK_1: // Tecla 1
+			player->changeSpaceship("nave1"); // Cambiamos a la nave1
+			break;
+		case SDLK_2: // Tecla 2
+			player->changeSpaceship("nave2"); // Cambiamos a la nave2
+			break;
+		case SDLK_m: // Tecla m
 			game->scale();
 			break;
 		case SDLK_d: // derecha

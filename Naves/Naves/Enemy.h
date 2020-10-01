@@ -5,8 +5,8 @@
 #include "EnemyProjectile.h"
 
 #define ENEMY_SPEED 2
-#define MIN_SHOOT_CADENCE 65
-#define MAX_SHOOT_CADENCE 80
+#define MIN_SHOOT_CADENCE 75
+#define MAX_SHOOT_CADENCE 100
 
 class Enemy : public Actor
 {

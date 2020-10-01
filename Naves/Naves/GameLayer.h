@@ -18,7 +18,7 @@
 #define ENEMY_SPAWN_FREQUENCY 4	
 
 // Frecuencia de aparición de elementos coleccionables.
-#define AMMO_COLLECTABLE_SPAWN_TIME 250
+#define AMMO_COLLECTABLE_SPAWN_TIME 350
 
 class GameLayer : public Layer
 {
