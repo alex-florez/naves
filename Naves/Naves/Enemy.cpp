@@ -34,7 +34,6 @@ void Enemy::update() {
 	}
 
 	if (state != game->stateDying) { // Si no se está muriendo...
-		x = x + vx;
 		if (x - (width / 2) <= 0) {
 			vx = vx * -1;
 		}
@@ -42,8 +41,8 @@ void Enemy::update() {
 
 }
 
-void Enemy::draw() {
-	animation->draw(x,y);
+void Enemy::draw(float scrollX) {
+	animation->draw(x - scrollX,y);
 }
 
 void Enemy::impacted() {

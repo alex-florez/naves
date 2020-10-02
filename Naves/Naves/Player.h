@@ -5,7 +5,7 @@
 #include "Audio.h"
 #include "Animation.h"
 
-#define PLAYER_SPEED 5
+#define PLAYER_SPEED 3
 
 class Player : public Actor
 {
@@ -16,7 +16,7 @@ public:
 	void moveX(float axis);
 	void moveY(float axis);
 	Projectile* shoot();
-	void draw() override;
+	void draw(float scrollX = 0) override;
 
 	int shootCadence = 30;
 	int shootTime = 0;

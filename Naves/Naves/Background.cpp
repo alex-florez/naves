@@ -32,7 +32,7 @@ void Background::update() {
 	}
 }
 
-void Background::draw() {
+void Background::draw(float scrollX) {
 	Actor::draw(); // Invocación al método del padre
 
 	if (backgroundAux != NULL) {

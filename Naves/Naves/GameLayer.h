@@ -7,8 +7,12 @@
 #include "Projectile.h"
 #include "Text.h"
 #include "Audio.h"
+#include "Tile.h"
+#include "Space.h"
 
 #include <list>
+#include <fstream> // Leer ficheros
+#include <sstream> // Leer líneas / strings
 
 #define ENEMY_SPAWN_TIME 110
 #define ENEMY_SPAWN_FREQUENCY 5		
@@ -23,6 +27,21 @@ public:
 	void update() override;
 	void draw() override;
 	void keysToControls(SDL_Event event);
+
+	// Métodos para cargar el mapa y los objetos del mismo
+	void loadMap(string name);
+	void loadMapObject(char character, float x, float y);
+
+	// Scroll
+	void calculateScroll();
+
+	float scrollX;
+
+	int mapWidth; // Ancho del mapa
+	list<Tile*> tiles; // Lista de tiles.
+
+	// Motor de movimientos / físicas
+	Space* space;
 
 	Player* player;
 	Background* background;

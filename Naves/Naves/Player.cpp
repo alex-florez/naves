@@ -69,8 +69,6 @@ void Player::update() {
 		}
 	}
 	
-	x = x + vx;
-	y = y + vy;
 	// Cadencia de disparo
 	if (shootTime > 0) {
 		shootTime--;
@@ -100,6 +98,6 @@ Projectile* Player::shoot() {
 	return NULL;
 }
 
-void Player::draw() {
-	animation->draw(x, y);
+void Player::draw(float scrollX) {
+	animation->draw(x - scrollX, y);
 }

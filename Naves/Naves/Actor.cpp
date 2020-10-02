@@ -20,7 +20,7 @@ Actor::~Actor() {
 	//SDL_DestroyTexture(texture); // No podemos destruir la textura, porque está cacheada.
 }
 
-void Actor::draw() {
+void Actor::draw(float scrollX) {
 	// Recorte en el fichero de la imagen
 	SDL_Rect source;
 	source.x = 0;
@@ -30,7 +30,7 @@ void Actor::draw() {
 
 	// Donde se va a pegar en el renderizador
 	SDL_Rect destination;
-	destination.x = x - width / 2;
+	destination.x = x - width / 2 - scrollX;
 	destination.y = y - height / 2;
 	destination.w = width;
 	destination.h = height;
@@ -52,9 +52,9 @@ bool Actor::isOverlap(Actor* actor) {
 	return overlap;
 }
 
-bool Actor::isInRender()
+bool Actor::isInRender(float scrollX)
 {
-	if (x - width / 2 <= WIDTH && x + width / 2 >= 0 &&
+	if ((x - scrollX) - width / 2  <= WIDTH && (x - scrollX) + width / 2 >= 0 &&
 		y - height / 2 <= HEIGHT && y + height / 2 >= 0) {
 		return true;
 	}
