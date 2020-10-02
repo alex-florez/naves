@@ -18,12 +18,11 @@ public:
 	Projectile* shoot();
 	bool impact();
 	void addAmmo(int ammo);
-	int getCurrentAmmo();
+	int getCurrentAmmo(); // Devuelve la munición actual de la nave seleccionada.
 	void changeSpaceship(string name); // Método para cambiar de nave
 
 	// Vidas del jugador
 	int lifes = PLAYER_LIFES;
-
 
 	// Audio
 	Audio* audioImpact;

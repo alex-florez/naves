@@ -28,14 +28,14 @@ Projectile* Player::shoot() {
 	return spaceship->shoot();
 }
 
+void Player::addAmmo(int extraAmmo) {
+	this->spaceship->ammo += extraAmmo;
+}
+
 bool Player::impact() {
 	audioImpact->play(); // Efecto de sonido.
 	lifes--;
 	return lifes <= 0;
-}
-
-void Player::addAmmo(int extraAmmo) {
-	this->spaceship->ammo += extraAmmo;
 }
 
 int Player::getCurrentAmmo() {
