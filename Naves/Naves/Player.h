@@ -17,6 +17,9 @@ public:
 	void moveY(float axis);
 	Projectile* shoot();
 	void draw(float scrollX = 0) override;
+	void jump(); // Saltar
+
+	bool onAir; // indica si el jugador está en el aire.
 
 	int shootCadence = 30;
 	int shootTime = 0;

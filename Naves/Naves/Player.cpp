@@ -18,10 +18,13 @@ Player::Player(float x, float y, Game* game)
 
 	state = game->stateMoving;
 	orientation = game->orientationRight;
+	onAir = false;
 }
 
 void Player::update() {
 	bool endAnimation = animation->update();
+
+	onAir = !collisionDown;
 	
 	// Si terminó la animación
 	if (endAnimation) {
@@ -81,6 +84,13 @@ void Player::moveX(float axis) {
 
 void Player::moveY(float axis) {
 	vy = axis * PLAYER_SPEED;
+}
+
+void Player::jump() {
+	if (!onAir) {
+		vy = -16;
+		onAir = true;
+	}
 }
 
 Projectile* Player::shoot() {

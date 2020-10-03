@@ -13,7 +13,7 @@ public:
 	void updateMoveLeft(Actor* dynamicAct);
 
 	void updateMoveTop(Actor* dynamicAct);
-	void updateMoveBottom(Actor* dynamicAct);
+	void updateMoveDown(Actor* dynamicAct);
 
 
 

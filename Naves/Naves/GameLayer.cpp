@@ -33,7 +33,7 @@ void GameLayer::init() {
 	// limpiar los tiles
 	tiles.clear();
 
-	space = new Space(0); // Instanciamos el motor de físicas con gravedad.
+	space = new Space(1); // Instanciamos el motor de físicas con gravedad.
 
 	// Destruir posibles objetos existentes
 	delete player;
@@ -91,13 +91,13 @@ void GameLayer::processControls() {
 
 	// Eje Y
 	if (controlMoveY > 0) {
-		player->moveY(1);
+	
 	}
 	else if (controlMoveY < 0) {
-		player->moveY(-1);
+		player->jump();
 	}
 	else {
-		player->moveY(0);
+		
 	}
 }
 

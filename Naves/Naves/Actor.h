@@ -11,6 +11,8 @@ public:
 	bool isOverlap(Actor* actor);
 	bool isInRender(float scrollX = 0);
 
+
+	bool collisionDown; // Indica si el actor está colisionando por abajo.
 	SDL_Texture* texture;
 	// Posición
 	int x;
