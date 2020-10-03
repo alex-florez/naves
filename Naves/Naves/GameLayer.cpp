@@ -193,8 +193,8 @@ void GameLayer::update() {
 	// Actualizamos los proyectiles
 	for (auto const& projectile : projectiles) {
 		projectile->update();
-		// Proyectil a la derecha de la pantalla
-		if (!projectile->isInRender(scrollX)) {
+		// Proyectil a la derecha de la pantalla o proyectil sin velocidad (impacto con algún elemnto estático)
+		if (!projectile->isInRender(scrollX) || projectile->vx == 0) {
 			markProjectileForDelete(projectile, deleteProjectiles);
 		}
 	}
