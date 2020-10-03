@@ -37,6 +37,10 @@ public:
 	Animation* aShootingLeft;
 	Animation* aShootingRight;
 
+	// Salto
+	Animation* aJumpingRight;
+	Animation* aJumpingLeft;
+
 	Animation* animation;
 
 	// Estado y orientación
