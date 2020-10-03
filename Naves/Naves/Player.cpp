@@ -22,6 +22,11 @@ Player::Player(float x, float y, Game* game)
 }
 
 void Player::update() {
+	// Reducimos el tiempo de invul.
+	if (invulnerableTime > 0) {
+		invulnerableTime--;
+	}
+
 	bool endAnimation = animation->update();
 
 	onAir = !collisionDown;
@@ -109,5 +114,20 @@ Projectile* Player::shoot() {
 }
 
 void Player::draw(float scrollX) {
-	animation->draw(x - scrollX, y);
+	if(invulnerableTime == 0)
+		animation->draw(x - scrollX, y);
+	else {
+		if (invulnerableTime % 10 >= 0 && invulnerableTime % 10 <= 5) {
+			animation->draw(x - scrollX, y);
+		}
+	}
+}
+
+void Player::loseLife() {
+	if (invulnerableTime <= 0) {
+		if (lifes > 0) {
+			lifes--;
+			invulnerableTime = 100; // 100 ticks de invulnerabilidad
+		}
+	}
 }
