@@ -172,6 +172,14 @@ void GameLayer::update() {
 	list<Enemy*> deleteEnemies; // Enemigos a eliminar
 	list<Projectile*> deleteProjectiles; // Proyectiles a eliminar
 
+	// Comprobamos si el jugador se cae del mapa
+	if ((player->y - player->height / 2) > HEIGHT) {
+		init();
+		return;
+	}
+
+
+
 	// Actualizamos todos los actores dinámicos
 	space->update();
 
