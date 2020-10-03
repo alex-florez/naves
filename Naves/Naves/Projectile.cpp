@@ -6,6 +6,8 @@ Projectile::Projectile(float x, float y, Game* game)
 	
 	vx = 9;
 	vy = -1;
+
+	canDestroy = true; // El proyectil puede destruir elementos destruibles.
 }
 
 void Projectile::update() {

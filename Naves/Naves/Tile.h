@@ -5,6 +5,6 @@
 class Tile : public Actor
 {
 public:
-	Tile(string filename, float x, float y, Game* game);
+	Tile(string filename, bool breakable, float x, float y, Game* game);
 };
 

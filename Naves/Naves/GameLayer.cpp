@@ -3,6 +3,7 @@
 
 void markEnemyForDelete(Enemy* enemy, list<Enemy*>& deleteList);
 void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteList);
+void markTileForDelete(Tile* tile, list<Tile*>& deleteList);
 
 //template <class T>
 //void markActorForDelete(T* actor, const list<T*>& deleteList) {
@@ -171,6 +172,7 @@ void GameLayer::update() {
 
 	list<Enemy*> deleteEnemies; // Enemigos a eliminar
 	list<Projectile*> deleteProjectiles; // Proyectiles a eliminar
+	list<Tile*> deleteTiles; // Tiles a eliminar
 
 	// Comprobamos si el jugador se cae del mapa
 	if ((player->y - player->height / 2) > HEIGHT) {
@@ -204,8 +206,8 @@ void GameLayer::update() {
 	// Actualizamos los proyectiles
 	for (auto const& projectile : projectiles) {
 		projectile->update();
-		// Proyectil a la derecha de la pantalla o proyectil sin velocidad (impacto con algún elemnto estático)
-		if (!projectile->isInRender(scrollX) || projectile->vx == 0) {
+		// Proyectil a la derecha de la pantalla o proyectil sin velocidad (impacto con algún elemento estático)
+		if (!projectile->isInRender(scrollX) || projectile->collisionLeft || projectile->collisionRight) {
 			markProjectileForDelete(projectile, deleteProjectiles);
 		}
 	}
@@ -232,6 +234,12 @@ void GameLayer::update() {
 		}
 	}
 
+	for (auto const& tile : tiles) { // Marcamos para eliminar todos los tiles que hayan sido destruidos
+		if (tile->destroyed)
+			markTileForDelete(tile, deleteTiles);
+	}
+
+
 	// Eliminamos los proyectiles y enemigos necesarios
 	for (auto const& delEnemy : deleteEnemies) {
 		enemies.remove(delEnemy);
@@ -246,6 +254,13 @@ void GameLayer::update() {
 		delete delProjectile; // Se destruye el proyectil.
 	}
 	deleteProjectiles.clear();
+
+	for (auto const& delTile : deleteTiles) {
+		tiles.remove(delTile);
+		space->removeStaticActor(delTile);
+		delete delTile;
+	}
+	deleteTiles.clear();
 
 	// Información
 	/*cout << "Killed Enemies: " << killedEnemies 
@@ -357,7 +372,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 			break;
 		}
 		case '#': {
-			Tile* tile = new Tile("res/bloque_tierra.png", x, y, game);
+			Tile* tile = new Tile("res/bloque_tierra.png", false, x, y, game);
 			// modificación para empezar a contar desde el suelo.
 			tile->y = tile->y - tile->height / 2;
 			tiles.push_back(tile);
@@ -371,6 +386,13 @@ void GameLayer::loadMapObject(char character, float x, float y)
 			enemy->y = enemy->y - enemy->height / 2;
 			enemies.push_back(enemy);
 			space->addDynamicActor(enemy);
+			break;
+		}
+		case 'B': {
+			Tile* tile = new Tile("res/bloque_fondo_muro.png", true, x, y, game);
+			tile->y = tile->y - tile->height / 2;
+			tiles.push_back(tile);
+			space->addStaticActor(tile);
 			break;
 		}
 	}
@@ -398,6 +420,16 @@ void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteLi
 		projectile) != deleteList.end();
 	if (!inList) {
 		deleteList.push_back(projectile);
+	}
+}
+
+
+void markTileForDelete(Tile* tile, list<Tile*>& deleteList) {
+	bool inList = std::find(deleteList.begin(),
+		deleteList.end(),
+		tile) != deleteList.end();
+	if (!inList) {
+		deleteList.push_back(tile);
 	}
 }
 

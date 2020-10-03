@@ -12,7 +12,11 @@ public:
 	bool isInRender(float scrollX = 0);
 
 
+	// Colisiones
 	bool collisionDown; // Indica si el actor está colisionando por abajo.
+	bool collisionLeft; // Actor colisiona por la izquierda.
+	bool collisionRight; // Actor colisiona por la derecha.
+
 	SDL_Texture* texture;
 	// Posición
 	int x;
@@ -29,5 +33,11 @@ public:
 	
 	Game* game;
 
+	// Capacidad para destruir a otros actores
+	bool canDestroy = false;
+
+	// Capacidad para ser destruido
+	bool breakable = false;
+	bool destroyed = false;
 };
 

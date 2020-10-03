@@ -30,7 +30,10 @@ void Space::update() {
 		if (actor->vy > 20) { // Limitamos la velocidad Y
 			actor->vy = 20;
 		}
-        actor->collisionDown = false; // Aún no se han detectado choques.
+        // Aún no se han detectado choques.
+        actor->collisionDown = false; 
+        actor->collisionLeft = false;
+        actor->collisionRight = false;
 
         // Mover actor dinámico a la derecha o izquierda
 		updateMoveRight(actor);
@@ -67,6 +70,10 @@ void Space::updateMoveRight(Actor* dynamicAct) {
                     // La distancia es MENOR que nuestro movimiento posible
                     // Tenemos que actualizar el movimiento posible a uno menor
                     possibleMovement = leftStatic - rightDynamic;
+                    dynamicAct->collisionRight = true;
+                    // Comprobamos si el actor dinámico puede destruir al estático
+                    if (dynamicAct->canDestroy && staticAct->breakable)
+                        staticAct->destroyed = true; // Marcado para destruirse
                 }
             }
         }
@@ -104,6 +111,10 @@ void Space::updateMoveLeft(Actor* dynamicAct) {
                     // La distancia es MENOR que nuestro movimiento posible
                     // Tenemos que actualizar el movimiento posible a uno menor
                     possibleMovement = rightStatic - leftDynamic;
+                    dynamicAct->collisionLeft = true;
+                    // Comprobamos si el actor dinámico puede destruir al estático
+                    if (dynamicAct->canDestroy && staticAct->breakable)
+                        staticAct->destroyed = true; // Marcado para destruirse
                 }
 
             }
