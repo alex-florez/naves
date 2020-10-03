@@ -172,6 +172,14 @@ void GameLayer::update() {
 	list<Enemy*> deleteEnemies; // Enemigos a eliminar
 	list<Projectile*> deleteProjectiles; // Proyectiles a eliminar
 
+	// Comprobamos si el jugador se cae del mapa
+	if ((player->y - player->height / 2) > HEIGHT) {
+		init();
+		return;
+	}
+
+
+
 	// Actualizamos todos los actores dinámicos
 	space->update();
 
@@ -186,8 +194,11 @@ void GameLayer::update() {
 		if (enemy->x + enemy->width/2 <= 0) { 
 			markEnemyForDelete(enemy, deleteEnemies);
 		} else if (player->isOverlap(enemy)) { // Colisión con el jugador
-			init();
-			return; // Se reinicia el juego.
+			player->loseLife();
+			if (player->lifes <= 0) { // Jugador sin vidas
+				init();
+				return; // Se reinicia el juego.
+			}
 		}
 	}
 	// Actualizamos los proyectiles

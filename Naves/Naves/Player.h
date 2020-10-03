@@ -18,6 +18,7 @@ public:
 	Projectile* shoot();
 	void draw(float scrollX = 0) override;
 	void jump(); // Saltar
+	void loseLife();
 
 	bool onAir; // indica si el jugador está en el aire.
 
@@ -36,11 +37,19 @@ public:
 	Animation* aShootingLeft;
 	Animation* aShootingRight;
 
+	// Salto
+	Animation* aJumpingRight;
+	Animation* aJumpingLeft;
+
 	Animation* animation;
 
 	// Estado y orientación
 	int state;
 	int orientation;
+
+	// Vidas y tiempo de invulnerabilidad
+	int lifes = 3;
+	int invulnerableTime = 0;
 };
 
 

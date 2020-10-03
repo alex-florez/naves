@@ -14,6 +14,9 @@ Player::Player(float x, float y, Game* game)
 	aShootingLeft = new Animation("res/jugador_disparando_izquierda.png", width, height, 160, 40, 6, 4, false, game);
 	aShootingRight = new Animation("res/jugador_disparando_derecha.png", width, height, 160, 40, 6, 4, false, game);
 
+	aJumpingRight = new Animation("res/jugador_saltando_derecha.png", width, height, 160, 40, 6, 4, true, game);
+	aJumpingLeft = new Animation("res/jugador_saltando_izquierda.png", width, height, 160, 40, 6, 4, true, game);
+
 	animation = aIdleRight; // Animación actual
 
 	state = game->stateMoving;
@@ -22,6 +25,11 @@ Player::Player(float x, float y, Game* game)
 }
 
 void Player::update() {
+	// Reducimos el tiempo de invul.
+	if (invulnerableTime > 0) {
+		invulnerableTime--;
+	}
+
 	bool endAnimation = animation->update();
 
 	onAir = !collisionDown;
@@ -33,7 +41,15 @@ void Player::update() {
 			state = game->stateMoving;
 		}
 	}
+	// En el aire y moviéndose, pasa a estar saltando
+	if (onAir && state == game->stateMoving) {
+		state = game->stateJumping;
+	}
 
+	// No está en el aire pero estaba saltando, pasa a moverse
+	if (!onAir && state == game->stateJumping) {
+		state = game->stateMoving;
+	}
 
 	// Establecemos la orientación
 	if (vx > 0) {
@@ -44,6 +60,16 @@ void Player::update() {
 	}
 
 	// Seleccionamos la animación basándonos en el estado.
+	if (state == game->stateJumping) {
+		if (orientation == game->orientationRight) {
+			animation = aJumpingRight;
+		}
+
+		if (orientation == game->orientationLeft) {
+			animation = aJumpingLeft;
+		}
+	}
+
 	if (state == game->stateShooting) { // Jugador disparando
 		if (orientation == game->orientationRight) {
 			animation = aShootingRight;
@@ -109,5 +135,20 @@ Projectile* Player::shoot() {
 }
 
 void Player::draw(float scrollX) {
-	animation->draw(x - scrollX, y);
+	if(invulnerableTime == 0)
+		animation->draw(x - scrollX, y);
+	else {
+		if (invulnerableTime % 10 >= 0 && invulnerableTime % 10 <= 5) {
+			animation->draw(x - scrollX, y);
+		}
+	}
+}
+
+void Player::loseLife() {
+	if (invulnerableTime <= 0) {
+		if (lifes > 0) {
+			lifes--;
+			invulnerableTime = 100; // 100 ticks de invulnerabilidad
+		}
+	}
 }

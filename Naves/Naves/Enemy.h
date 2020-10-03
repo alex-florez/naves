@@ -18,5 +18,6 @@ public:
 	Animation* animation; // Referencia a la animación actual.
 
 	int state;
+	float vxIntelligence;
 };
 
