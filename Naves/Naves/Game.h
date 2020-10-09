@@ -31,13 +31,16 @@ public:
 	SDL_Window* window; // ventana
 	SDL_Renderer* renderer; // renderizador
 	bool loopActive; // Juego activo?
-	Layer* gameLayer;
 	bool scaledToMax = false;
 	float scaleLower = 1; // Factor de escalado
 	TTF_Font* font;
 
-	// Estados y orientaciones
+	// Layers
+	Layer* layer;
+	Layer* menuLayer;
+	Layer* gameLayer;
 
+	// Estados y orientaciones
 	int const stateMoving = 1;
 	int const stateJumping = 2;
 	int const stateDying = 3;
