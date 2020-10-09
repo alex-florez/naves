@@ -47,5 +47,9 @@ public:
 	int const orientationRight = 1;
 	int const orientationLeft = 2;
 
+	// Control de niveles
+	int currentLevel = 0;
+	int finalLevel = 2;
+
 };
 

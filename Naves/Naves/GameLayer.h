@@ -66,6 +66,9 @@ public:
 
 	// Audio
 	Audio* audioBackground;
+
+	// Copa de final de nivel
+	Tile* cup;
 private:
 	void addNewEnemy();
 	void destroyEnemies();

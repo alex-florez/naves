@@ -60,7 +60,7 @@ void GameLayer::init() {
 	audioBackground->play();
 
 	// cargamos el mapa a partir del fichero
-	loadMap("res/0.txt");
+	loadMap("res/" + to_string(game->currentLevel) + ".txt");
 }
 
 void GameLayer::processControls() {
@@ -178,6 +178,16 @@ void GameLayer::update() {
 		return;
 	}
 
+	// Comprobamos si el jugador colisiona con el elemento de final de nivel
+	if (cup->isOverlap(player)) {
+		game->currentLevel++;
+		if (game->currentLevel > game->finalLevel) {
+			game->currentLevel = 0;
+		}
+		init();
+		return;
+	}
+
 
 
 	// Actualizamos todos los actores dinámicos
@@ -286,6 +296,10 @@ void GameLayer::draw() {
 	}
 
 	player->draw(scrollX);
+
+	//Dibujamos la copa
+	cup->draw(scrollX);
+
 	// Dibujamos los enemigos
 	for (auto const& enemy : enemies) {
 		enemy->draw(scrollX);
@@ -360,6 +374,11 @@ void GameLayer::loadMapObject(char character, float x, float y)
 			enemy->y = enemy->y - enemy->height / 2;
 			enemies.push_back(enemy);
 			space->addDynamicActor(enemy);
+			break;
+		}
+		case 'C': {
+			cup = new Tile("res/copa.png", x, y, game);
+			cup->y = cup->y - cup->height / 2;
 			break;
 		}
 	}
