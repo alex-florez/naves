@@ -1,7 +1,7 @@
 #include "Player.h"
 
 Player::Player(float x, float y, Game* game)
-	: Actor("res/jugador.png", x, y, 35, 35, game) {
+	: Actor("res/jugador.png", x, y, 46, 46, game) {
 
 	audioShoot = new Audio("res/efecto_disparo.wav", false);
 
