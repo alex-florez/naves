@@ -27,6 +27,7 @@ public:
 	void update() override;
 	void draw() override;
 	void keysToControls(SDL_Event event);
+	void mouseToControls(SDL_Event event); // Uso del mouse
 
 	// Métodos para cargar el mapa y los objetos del mismo
 	void loadMap(string name);
@@ -69,6 +70,10 @@ public:
 
 	// Copa de final de nivel
 	Tile* cup;
+
+	// Elementos de la interfaz
+	Actor* buttonJump;
+	Actor* buttonShoot;
 private:
 	void addNewEnemy();
 	void destroyEnemies();

@@ -11,6 +11,11 @@ public:
 	bool isOverlap(Actor* actor);
 	bool isInRender(float scrollX = 0);
 
+	// Control con el ratón
+	bool containsPoint(int pointX, int pointY); // Contiene punto?
+	bool clicked;
+
+
 
 	bool collisionDown; // Indica si el actor está colisionando por abajo.
 	SDL_Texture* texture;

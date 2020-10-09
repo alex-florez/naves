@@ -14,6 +14,8 @@ Actor::Actor(string filename, float x, float y, int width, int height, Game* gam
 	// Lo que mide en el juego
 	this->width = width;
 	this->height = height;
+	// Control del ratón
+	clicked = false;
 }
 
 Actor::~Actor() {
@@ -56,6 +58,16 @@ bool Actor::isInRender(float scrollX)
 {
 	if ((x - scrollX) - width / 2  <= WIDTH && (x - scrollX) + width / 2 >= 0 &&
 		y - height / 2 <= HEIGHT && y + height / 2 >= 0) {
+		return true;
+	}
+	return false;
+}
+
+bool Actor::containsPoint(int pointX, int pointY) {
+	if (pointY >= y - height / 2 &&
+		pointY <= y + height / 2 &&
+		pointX >= x - width / 2 &&
+		pointX <= x + width / 2) {
 		return true;
 	}
 	return false;

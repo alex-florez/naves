@@ -59,6 +59,11 @@ void GameLayer::init() {
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
 	audioBackground->play();
 
+	// Botones de la interfaz
+	buttonJump = new Actor("res/boton_salto.png", WIDTH*0.9, HEIGHT * 0.55, 100, 100, game);
+	buttonShoot = new Actor("res/boton_disparo.png", WIDTH * 0.75, HEIGHT * 0.83, 100, 100, game);
+
+
 	// cargamos el mapa a partir del fichero
 	loadMap("res/" + to_string(game->currentLevel) + ".txt");
 }
@@ -68,6 +73,7 @@ void GameLayer::processControls() {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		keysToControls(event);
+		mouseToControls(event);
 	}
 	// procesar controles
 	// Disparar
@@ -163,6 +169,40 @@ void GameLayer::keysToControls(SDL_Event event) {
 	}
 }
 
+void GameLayer::mouseToControls(SDL_Event event) {
+	// Modificación de coordenadas por posible escalado
+	float motionX = event.motion.x / game->scaleLower;
+	float motionY = event.motion.y / game->scaleLower;
+
+	// Cada vez que el usuario hace click
+	if (event.type == SDL_MOUSEBUTTONDOWN) {
+		if (buttonShoot->containsPoint(motionX, motionY)) {
+			controlShoot = true;
+		}
+		if (buttonJump->containsPoint(motionX, motionY)) {
+			controlMoveY = -1;
+		}
+	}
+	// Cada vez que se mueve
+	if (event.type == SDL_MOUSEMOTION) {
+		if (!buttonShoot->containsPoint(motionX, motionY)) { // Ratón se mueve fuera del botón de disparo
+			controlShoot = false;
+		}
+		if (!buttonJump->containsPoint(motionX, motionY)) {
+			controlMoveY = 0;
+		}
+	}
+
+	// Cada vez que se levanta el click
+	if (event.type == SDL_MOUSEBUTTONUP) {
+		if (buttonShoot->containsPoint(motionX, motionY)) {
+			controlShoot = false;
+		}
+		if (buttonJump->containsPoint(motionX, motionY)) {
+			controlMoveY = 0;
+		}
+	}
+}
 
 /**
 * Método encargado de actualizar todos los elementos del juego.
@@ -311,6 +351,9 @@ void GameLayer::draw() {
 
 	textPoints->draw();
 	backgroundPoints->draw();
+	// HUD
+	buttonJump->draw(); // NO TIENEN SCROLL, POSISICIÓN FIJA
+	buttonShoot->draw(); 
 
 	SDL_RenderPresent(game->renderer); // Renderiza el juego
 }
