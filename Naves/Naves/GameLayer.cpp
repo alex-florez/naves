@@ -73,8 +73,20 @@ void GameLayer::processControls() {
 	// obtener controles
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
-		keysToControls(event);
-		mouseToControls(event);
+		// Cambio automático del input
+		if (event.type == SDL_KEYDOWN) {
+			game->input = game->inputKeyboard;
+		}
+		if (event.type == SDL_MOUSEBUTTONDOWN) {
+			game->input = game->inputMouse;
+		}
+
+		if (game->input == game->inputKeyboard) {
+			keysToControls(event);
+		}
+		if (game->input == game->inputMouse) {
+			mouseToControls(event);
+		}
 	}
 	// procesar controles
 	// Disparar
@@ -373,9 +385,12 @@ void GameLayer::draw() {
 	textPoints->draw();
 	backgroundPoints->draw();
 	// HUD
-	buttonJump->draw(); // NO TIENEN SCROLL, POSISICIÓN FIJA
-	buttonShoot->draw();
-	pad->draw(); // Sin scroll - posición fija
+	if (game->input == game->inputMouse) { // Dibujar el HUD solo si el tipo de entrada es el mouse
+		buttonJump->draw(); // NO TIENEN SCROLL, POSISICIÓN FIJA
+		buttonShoot->draw();
+		pad->draw(); // Sin scroll - posición fija
+	}
+	
 
 	SDL_RenderPresent(game->renderer); // Renderiza el juego
 }
