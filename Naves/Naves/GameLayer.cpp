@@ -74,17 +74,23 @@ void GameLayer::processControls() {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		// Cambio automático del input
-		if (event.type == SDL_KEYDOWN) {
-			game->input = game->inputKeyboard;
-		}
-		if (event.type == SDL_MOUSEBUTTONDOWN) {
-			game->input = game->inputMouse;
+		switch (event.type)
+		{
+		case SDL_QUIT: // Se hace click en la X para cerrar la ventana
+			game->loopActive = false;
+			break;
+		case SDL_KEYDOWN:
+			game->input = GameInputType::KEYBOARD;
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			game->input = GameInputType::MOUSE;
+			break;
 		}
 
-		if (game->input == game->inputKeyboard) {
+		if (game->input == GameInputType::KEYBOARD) {
 			keysToControls(event);
 		}
-		if (game->input == game->inputMouse) {
+		if (game->input == GameInputType::MOUSE) {
 			mouseToControls(event);
 		}
 	}
@@ -176,10 +182,7 @@ void GameLayer::keysToControls(SDL_Event event) {
 			break;
 		}
 	}
-	// Se hace click en la X para cerrar la ventana
-	if (event.type == SDL_QUIT) {
-		game->loopActive = false;
-	}
+	
 }
 
 void GameLayer::mouseToControls(SDL_Event event) {
@@ -385,7 +388,7 @@ void GameLayer::draw() {
 	textPoints->draw();
 	backgroundPoints->draw();
 	// HUD
-	if (game->input == game->inputMouse) { // Dibujar el HUD solo si el tipo de entrada es el mouse
+	if (game->input == GameInputType::MOUSE) { // Dibujar el HUD solo si el tipo de entrada es el mouse
 		buttonJump->draw(); // NO TIENEN SCROLL, POSISICIÓN FIJA
 		buttonShoot->draw();
 		pad->draw(); // Sin scroll - posición fija

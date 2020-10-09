@@ -18,6 +18,10 @@ using namespace std;
 #include "Layer.h"
 class Layer;
 
+enum class GameInputType {
+	KEYBOARD, MOUSE, GAMEPAD
+};
+
 class Game
 {
 public:
@@ -55,7 +59,9 @@ public:
 	int finalLevel = 2;
 
 	// Tipos de entrada
-	int input;
+	GameInputType input;
+
+
 	int const inputKeyboard = 1;
 	int const inputMouse = 2;
 	int const inputGamePad = 3;

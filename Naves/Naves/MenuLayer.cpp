@@ -26,16 +26,16 @@ void MenuLayer::processControls() {
 	while (SDL_PollEvent(&event)) {
 		// Seleccionar tipo de entrada
 		if (event.type == SDL_KEYDOWN) {
-			game->input = game->inputKeyboard;
+			game->input = GameInputType::KEYBOARD;
 		}
 		if (event.type == SDL_MOUSEBUTTONDOWN) {
-			game->input = game->inputMouse;
+			game->input = GameInputType::MOUSE;
 		}
 		// Procesar teclas
-		if (game->input == game->inputKeyboard) {
+		if (game->input == GameInputType::KEYBOARD) {
 			keysToControls(event);
 		}
-		if (game->input == game->inputMouse) {
+		if (game->input == GameInputType::MOUSE) {
 			mouseToControls(event);
 		}
 
