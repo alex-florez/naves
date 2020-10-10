@@ -5,7 +5,7 @@ void markEnemyForDelete(Enemy* enemy, list<Enemy*>& deleteList);
 void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteList);
 void markEnemyProjectileForDelete(EnemyProjectile* eProjetile, list<EnemyProjectile*>& deleteList);
 void markAmmoCollectableForDelete(AmmoCollectable* ammoCollectable, list<AmmoCollectable*>& deletelist);
-
+void markLifeCollectableForDelete(LifeCollectable* lifeCollectable, list<LifeCollectable*>& deleteList);
 
 GameLayer::GameLayer(Game* game)
 	: Layer(game) { // Se hace una llamada al constructor del padre
@@ -29,6 +29,7 @@ void GameLayer::init() {
 	destroyProjectiles();
 	destroyEnemyProjectiles();
 	destroyAmmoCollectables();
+	destroyLifeCollectables();
 
 	player = new Player(50, 50, game);
 	background = new Background("res/fondo.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
@@ -45,6 +46,7 @@ void GameLayer::init() {
 
 	// Elementos recolectables
 	ammoCollectables.clear();
+	lifeCollectables.clear();
 
 
 	// Enemigos eliminados
@@ -174,6 +176,7 @@ void GameLayer::update() {
 	list<Projectile*> deleteProjectiles; // Proyectiles a eliminar
 	list<EnemyProjectile*> deleteEnemyProjectiles; // Proyectiles del enemigo a eliminar
 	list<AmmoCollectable*> deleteAmmoCollectables; // Coleccionables de munición a eliminar
+	list<LifeCollectable*> deleteLifeCollectables; // Coleccionables de vidas a eliminar
 
 	// Actualizamos el fondo móvil
 	background->update();
@@ -187,6 +190,7 @@ void GameLayer::update() {
 
 	// Generamos los recolectables
 	addNewAmmoCollectable();
+	addNewLifeCollectable();
 
 	player->update();
 	// Actualizamos los enemigos
@@ -258,6 +262,14 @@ void GameLayer::update() {
 		}
 	}
 
+	for (auto const& lifeCollectable : lifeCollectables) {
+		if (player->spaceship->isOverlap(lifeCollectable)) { // Jugador recoge vida
+			player->lifes++; // Se incrementa el número de vidas
+			healthBar->setLifes(player->lifes); // Actualizar HealthBar
+			markLifeCollectableForDelete(lifeCollectable, deleteLifeCollectables);
+		}
+	}
+
 
 	// Eliminación de elementos del juego
 	// **********************************
@@ -289,6 +301,12 @@ void GameLayer::update() {
 	}
 	deleteAmmoCollectables.clear();
 
+	for (auto const& lifeCollectable : deleteLifeCollectables) {
+		lifeCollectables.remove(lifeCollectable);
+		delete lifeCollectable;
+	}
+	deleteLifeCollectables.clear();
+
 	// Información
 	cout << "Killed Enemies: " << killedEnemies
 		<< " Current enemies: " << enemies.size()
@@ -315,6 +333,10 @@ void GameLayer::draw() {
 	// Dibujamos elementos coleccionables
 	for (auto const& ammoCollectable : ammoCollectables) {
 		ammoCollectable->draw();
+	}
+
+	for (auto const& lifeCollectable : lifeCollectables) {
+		lifeCollectable->draw();
 	}
 
 	// Dibujamos elementos de la UI
@@ -367,6 +389,16 @@ void markAmmoCollectableForDelete(AmmoCollectable* ammoCollectable, list<AmmoCol
 }
 
 
+void markLifeCollectableForDelete(LifeCollectable* lifeCollectable, list<LifeCollectable*>& deleteList) {
+	bool inList = std::find(deleteList.begin(),
+		deleteList.end(),
+		lifeCollectable) != deleteList.end();
+	if (!inList) {
+		deleteList.push_back(lifeCollectable);
+	}
+}
+
+
 // Molaría a esto
 // markActorForDelete(projectile, deleteProjectiles);
 // markActorForDelete(enemy, deleteEnemies);
@@ -403,6 +435,18 @@ void GameLayer::addNewAmmoCollectable() {
 	}
 }
 
+void GameLayer::addNewLifeCollectable() {
+	newLifeCollectableTime--;
+
+	if (newLifeCollectableTime <= 0) {
+		// Posición aleatoria para que aparezca en la mitad derecha del render
+		int rX = (rand() % (WIDTH - WIDTH / 2)) + 1 + WIDTH / 2;
+		int rY = (rand() % (HEIGHT - 18 - 18)) + 1 + 18;
+		lifeCollectables.push_back(new LifeCollectable(rX, rY, game));
+		newLifeCollectableTime = LIFE_COLLECTABLE_SPAWN_TIME;
+	}
+}
+
 // Métodos encargados de destruir objetos en memoria
 // *************************************************
 
@@ -427,6 +471,12 @@ void GameLayer::destroyEnemyProjectiles() {
 void GameLayer::destroyAmmoCollectables() {
 	for (auto const& ammoCollectable : ammoCollectables) {
 		delete ammoCollectable;
+	}
+}
+
+void GameLayer::destroyLifeCollectables() {
+	for (auto const& lifeCollectable : lifeCollectables) {
+		delete lifeCollectable;
 	}
 }
 
