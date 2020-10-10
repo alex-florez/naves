@@ -4,6 +4,7 @@ Player::Player(float x, float y, Game* game)
 	: Actor("res/jugador.png", x, y, 46, 46, game) {
 
 	audioShoot = new Audio("res/efecto_disparo.wav", false);
+	audioJumpOverEnemy = new Audio("res/jump_03.wav", false);
 
 	// Animaciones del jugador
 	aIdleRight = new Animation("res/jugador_idle_derecha.png", width, height, 320, 40, 6, 8, true, game);
@@ -151,4 +152,25 @@ void Player::loseLife() {
 			invulnerableTime = 100; // 100 ticks de invulnerabilidad
 		}
 	}
+}
+
+bool Player::isOver(Actor* actor) {
+	float actorRight = actor->x + actor->width / 2;
+	float actorLeft = actor->x - actor->width / 2;
+	float actorTop = actor->y - actor->height / 2;
+
+	float playerBottom = this->y + this->height / 2;
+	float playerLeft = this->x - this->width / 2;
+	float playerRight = this->x + this->width / 2;
+	float playerTop = this->y - this->height / 2;
+
+	if (playerLeft <= (actorRight - this->width / 2) &&
+		playerRight >= (actorLeft + this->width / 2)) {
+		if (playerBottom <= (actorTop + this->height/2)) {
+			audioJumpOverEnemy->play();
+			return true;
+		}
+		return false;
+	}
+	return false;
 }

@@ -19,6 +19,7 @@ public:
 	void draw(float scrollX = 0) override;
 	void jump(); // Saltar
 	void loseLife();
+	bool isOver(Actor* actor);
 
 	bool onAir; // indica si el jugador está en el aire.
 
@@ -27,6 +28,7 @@ public:
 
 	// Audio
 	Audio* audioShoot;
+	Audio* audioJumpOverEnemy;
 
 	// Animaciones
 	Animation* aIdleRight;

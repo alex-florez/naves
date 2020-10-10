@@ -296,10 +296,16 @@ void GameLayer::update() {
 		if (enemy->x + enemy->width/2 <= 0) { 
 			markEnemyForDelete(enemy, deleteEnemies);
 		} else if (player->isOverlap(enemy)) { // Colisión con el jugador
-			player->loseLife();
-			if (player->lifes <= 0) { // Jugador sin vidas
-				init();
-				return; // Se reinicia el juego.
+			// Comprobamos si el player ha saltado encima del enemigo
+			if (player->isOver(enemy)) {
+				markEnemyForDelete(enemy, deleteEnemies);
+			}
+			else {
+				player->loseLife();
+				if (player->lifes <= 0) { // Jugador sin vidas
+					init();
+					return; // Se reinicia el juego.
+				}
 			}
 		}
 	}
