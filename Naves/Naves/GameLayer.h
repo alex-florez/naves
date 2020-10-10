@@ -76,6 +76,11 @@ public:
 	Pad* pad;
 	Actor* buttonJump;
 	Actor* buttonShoot;
+
+	// Pausa y mensajes
+	Actor* message;
+	bool pause;
+	bool controlContinue;
 private:
 	void addNewEnemy();
 	void destroyEnemies();

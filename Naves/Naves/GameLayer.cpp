@@ -17,6 +17,9 @@ void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteLi
 
 GameLayer::GameLayer(Game* game)
 	: Layer(game) { // Se hace una llamada al constructor del padre
+	pause = true;
+	message = new Actor("res/mensaje_como_jugar.png", WIDTH*0.5, HEIGHT*0.5,
+		WIDTH, HEIGHT, game);
 	init();
 }
 
@@ -57,7 +60,7 @@ void GameLayer::init() {
 
 	// Audio de fondo
 	audioBackground = new Audio("res/musica_ambiente.mp3", true);
-	//audioBackground->play();
+	audioBackground->play();
 
 	// Botones de la interfaz
 	buttonJump = new Actor("res/boton_salto.png", WIDTH*0.9, HEIGHT * 0.55, 100, 100, game);
@@ -95,6 +98,12 @@ void GameLayer::processControls() {
 		}
 	}
 	// procesar controles
+	// Despausar el juego
+	if (controlContinue) {
+		pause = false;
+		controlContinue = false;
+	}
+
 	// Disparar
 	if (controlShoot) {
 		Projectile* newProjectile = player->shoot();
@@ -192,6 +201,7 @@ void GameLayer::mouseToControls(SDL_Event event) {
 
 	// Cada vez que el usuario hace click
 	if (event.type == SDL_MOUSEBUTTONDOWN) {
+		controlContinue = true;
 		if (pad->containsPoint(motionX, motionY)) {
 			pad->clicked = true;
 			controlMoveX = pad->getOrientationX(motionX);
@@ -247,6 +257,10 @@ void GameLayer::update() {
 
 	list<Enemy*> deleteEnemies; // Enemigos a eliminar
 	list<Projectile*> deleteProjectiles; // Proyectiles a eliminar
+
+	if (pause) {
+		return;
+	}
 
 	// Comprobamos si el jugador se cae del mapa
 	if ((player->y - player->height / 2) > HEIGHT) {
@@ -392,6 +406,10 @@ void GameLayer::draw() {
 		buttonJump->draw(); // NO TIENEN SCROLL, POSISICIÓN FIJA
 		buttonShoot->draw();
 		pad->draw(); // Sin scroll - posición fija
+	}
+
+	if (pause) {
+		message->draw();
 	}
 	
 
