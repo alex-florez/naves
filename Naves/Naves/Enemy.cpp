@@ -42,6 +42,20 @@ void Enemy::update() {
 			vxIntelligence = vxIntelligence * -1;
 			vx = vxIntelligence;
 		}
+		if (outRight) {
+			// Mover hacia la izquierda
+			if (vxIntelligence > 0) {
+				vxIntelligence = vxIntelligence * -1;
+			}
+			vx = vxIntelligence;
+		}
+		if (outLeft) {
+			// Mover hacia la derecha
+			if (vxIntelligence < 0) {
+				vxIntelligence = vxIntelligence * -1;
+			}
+			vx = vxIntelligence;
+		}
 	}
 
 }

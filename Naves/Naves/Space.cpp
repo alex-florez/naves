@@ -31,6 +31,8 @@ void Space::update() {
 			actor->vy = 20;
 		}
         actor->collisionDown = false; // Aún no se han detectado choques.
+        actor->outLeft = true;
+        actor->outRight = true;
 
         // Mover actor dinámico a la derecha o izquierda
 		updateMoveRight(actor);
@@ -179,6 +181,13 @@ void Space::updateMoveDown(Actor* dynamicAct) {
                 if (possibleMovement >= topStatic - downDynamic) {
                     possibleMovement = topStatic - downDynamic;
                     dynamicAct->collisionDown = true;
+
+                    if (rightDynamic <= rightStatic) {
+                        dynamicAct->outRight = false;
+                    }
+                    if (leftDynamic >= leftStatic) {
+                        dynamicAct->outLeft = false;
+                    }
                 }
             }
         }

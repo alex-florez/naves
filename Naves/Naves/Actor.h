@@ -18,6 +18,9 @@ public:
 
 
 	bool collisionDown; // Indica si el actor está colisionando por abajo.
+	bool outRight; // Indica si el actor se sale por la derecha
+	bool outLeft; // Actor se sale por la izquierda.
+
 	SDL_Texture* texture;
 	// Posición
 	int x;
