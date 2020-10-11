@@ -38,8 +38,10 @@ public:
 	void calculateScroll();
 
 	float scrollX;
+	float scrollY;
 
 	int mapWidth; // Ancho del mapa
+	int mapHeight; // Alto del mapa
 	list<Tile*> tiles; // Lista de tiles.
 
 	// Motor de movimientos / físicas

@@ -16,7 +16,7 @@ public:
 	void moveX(float axis);
 	void moveY(float axis);
 	Projectile* shoot();
-	void draw(float scrollX = 0) override;
+	void draw(float scrollX = 0, float scrollY = 0) override;
 	void jump(); // Saltar
 	void loseLife();
 	bool isOver(Actor* actor);

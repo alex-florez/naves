@@ -32,6 +32,7 @@ void GameLayer::init() {
 
 	// Scroll
 	scrollX = 0; // A la izquierda del todo
+	scrollY = 0; // Arriba del todo
 
 	// limpiar los tiles
 	tiles.clear();
@@ -313,7 +314,7 @@ void GameLayer::update() {
 	for (auto const& projectile : projectiles) {
 		projectile->update();
 		// Proyectil a la derecha de la pantalla o proyectil sin velocidad (impacto con algún elemnto estático)
-		if (!projectile->isInRender(scrollX) || projectile->vx == 0) {
+		if (!projectile->isInRender(scrollX, scrollY) || projectile->vx == 0) {
 			markProjectileForDelete(projectile, deleteProjectiles);
 		}
 	}
@@ -362,10 +363,11 @@ void GameLayer::update() {
 }
 
 /*
-	Método encargado de calcular el scrollX
-	en base a la posición del jugador.
+	Método encargado de calcular el scrollX y el
+	scrollY en base a la posición del jugador.
 */
 void GameLayer::calculateScroll() {
+	// ScrollX
 	// Límite izquierda
 	if (player->x > WIDTH * 0.3) {
 		if (player->x - scrollX < WIDTH * 0.3) {
@@ -379,6 +381,22 @@ void GameLayer::calculateScroll() {
 			scrollX = player->x - WIDTH * 0.7;
 		}
 	}
+
+	// ScrollY
+	// Límite arriba
+	if (player->y > HEIGHT * 0.3) {
+		if (player->y - scrollY < HEIGHT * 0.3) {
+			scrollY = player->y - (HEIGHT * 0.3);
+		}
+	}
+
+
+	// Límite abajo
+	if (player->y < mapHeight - HEIGHT * 0.3) {
+		if (player->y - scrollY > HEIGHT * 0.7) {
+			scrollY = player->y - (HEIGHT * 0.7);
+		}
+	}
 }
 
 
@@ -390,21 +408,21 @@ void GameLayer::draw() {
 
 	// Dibujamos los tiles
 	for (auto const& tile : tiles) {
-		tile->draw(scrollX);
+		tile->draw(scrollX, scrollY);
 	}
 
-	player->draw(scrollX);
+	player->draw(scrollX, scrollY);
 
 	//Dibujamos la copa
-	cup->draw(scrollX);
+	cup->draw(scrollX, scrollY);
 
 	// Dibujamos los enemigos
 	for (auto const& enemy : enemies) {
-		enemy->draw(scrollX);
+		enemy->draw(scrollX, scrollY);
 	}
 	// Dibujamos los proyectiles
 	for (auto const& projectile : projectiles) {
-		projectile->draw(scrollX);
+		projectile->draw(scrollX, scrollY);
 	}
 
 	textPoints->draw();
@@ -430,6 +448,7 @@ void GameLayer::draw() {
 */
 void GameLayer::loadMap(string name) {
 	char character;
+	int totalLines = 0;
 	string line;
 	ifstream streamFile(name.c_str()); // No es una función, es el constructor de ifstream
 	if (!streamFile.is_open()) {
@@ -439,6 +458,7 @@ void GameLayer::loadMap(string name) {
 	else {
 		// Por línea
 		for (int i = 0; getline(streamFile, line); i++) {
+			totalLines++;
 			istringstream streamLine(line);
 			mapWidth = line.length() * 40; // Ancho del mapa en pixels
 			// Por carácter (en cada línea)
@@ -452,7 +472,10 @@ void GameLayer::loadMap(string name) {
 
 			cout << character << endl;
 		}
+		mapHeight = totalLines * 32;
 	}
+
+	scrollY = mapHeight - HEIGHT;
 	streamFile.close();
 }
 

@@ -10,7 +10,7 @@ class Enemy : public Actor
 public:
 	Enemy(float x, float y, Game* game);
 	void update();
-	void draw(float scrollX = 0) override;
+	void draw(float scrollX = 0, float scrollY = 0) override;
 	void impacted(); // Enemigo recibe un impacto
 
 	Animation* aMoving;
