@@ -167,7 +167,7 @@ bool Player::isOver(Actor* actor) {
 	if (playerLeft <= (actorRight - this->width / 4) &&
 		playerRight >= (actorLeft + this->width / 4)) {
 		if (playerBottom <= (actorTop + this->height/2) 
-			&& playerBottom >= (actorTop)) {
+			&& playerBottom >= actorTop) {
 			return true;
 		}
 		return false;
