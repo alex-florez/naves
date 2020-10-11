@@ -164,10 +164,10 @@ bool Player::isOver(Actor* actor) {
 	float playerRight = this->x + this->width / 2;
 	float playerTop = this->y - this->height / 2;
 
-	if (playerLeft <= (actorRight - this->width / 2) &&
-		playerRight >= (actorLeft + this->width / 2)) {
-		if (playerBottom <= (actorTop + this->height/2)) {
-			audioJumpOverEnemy->play();
+	if (playerLeft <= (actorRight - this->width / 4) &&
+		playerRight >= (actorLeft + this->width / 4)) {
+		if (playerBottom <= (actorTop + this->height/2) 
+			&& playerBottom >= (actorTop)) {
 			return true;
 		}
 		return false;

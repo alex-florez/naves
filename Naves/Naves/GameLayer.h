@@ -8,6 +8,7 @@
 #include "Text.h"
 #include "Audio.h"
 #include "Tile.h"
+#include "DestroyableTile.h"
 #include "Space.h"
 #include "Pad.h"
 

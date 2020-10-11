@@ -3,6 +3,7 @@
 
 void markEnemyForDelete(Enemy* enemy, list<Enemy*>& deleteList);
 void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteList);
+void markTileForDelete(Tile* tile, list<Tile*>& deleteList);
 
 //template <class T>
 //void markActorForDelete(T* actor, const list<T*>& deleteList) {
@@ -258,6 +259,7 @@ void GameLayer::update() {
 
 	list<Enemy*> deleteEnemies; // Enemigos a eliminar
 	list<Projectile*> deleteProjectiles; // Proyectiles a eliminar
+	list<Tile*> deleteTiles; // Tiles a eliminar
 
 	if (pause) {
 		return;
@@ -299,6 +301,7 @@ void GameLayer::update() {
 		} else if (player->isOverlap(enemy)) { // Colisión con el jugador
 			// Comprobamos si el player ha saltado encima del enemigo
 			if (player->isOver(enemy)) {
+				player->audioJumpOverEnemy->play(); // Reproducir sonido de aplastamiento
 				markEnemyForDelete(enemy, deleteEnemies);
 			}
 			else {
@@ -341,6 +344,15 @@ void GameLayer::update() {
 		}
 	}
 
+	// Actualizamos los tiles
+	for (auto const& tile : tiles) {
+		tile->playerIsOver = player->isOver(tile);  // Jugador encima del tile
+		tile->update(); // Actualizar ticks del tile
+		if (tile->willDestroy()) { // Si el tile se va a destruir...
+			markTileForDelete(tile, deleteTiles); // Eliminarlo
+		}
+	}
+
 	// Eliminamos los proyectiles y enemigos necesarios
 	for (auto const& delEnemy : deleteEnemies) {
 		enemies.remove(delEnemy);
@@ -355,6 +367,13 @@ void GameLayer::update() {
 		delete delProjectile; // Se destruye el proyectil.
 	}
 	deleteProjectiles.clear();
+
+	// Eliminar los tiles marcados
+	for (auto const& tile : deleteTiles) {
+		tiles.remove(tile);
+		delete tile;
+	}
+	deleteTiles.clear();
 
 	// Información
 	/*cout << "Killed Enemies: " << killedEnemies 
@@ -513,6 +532,13 @@ void GameLayer::loadMapObject(char character, float x, float y)
 			cup->y = cup->y - cup->height / 2;
 			break;
 		}
+		case 'W': {
+			Tile* destroyableTile = new DestroyableTile("res/bloque_fondo_muro.png", 20, x, y, game);
+			destroyableTile->y = destroyableTile->y - destroyableTile->height / 2;
+			tiles.push_back(destroyableTile);
+			space->addStaticActor(destroyableTile);
+			break;
+		}
 	}
 }
 
@@ -540,6 +566,17 @@ void markProjectileForDelete(Projectile* projectile, list<Projectile*>& deleteLi
 		deleteList.push_back(projectile);
 	}
 }
+
+
+void markTileForDelete(Tile* tile, list<Tile*>& deleteList) {
+	bool inList = std::find(deleteList.begin(),
+		deleteList.end(),
+		tile) != deleteList.end();
+	if (!inList) {
+		deleteList.push_back(tile);
+	}
+}
+
 
 // Molaría esto
 // markActorForDelete(projectile, deleteProjectiles);
