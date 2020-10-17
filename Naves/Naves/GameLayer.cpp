@@ -21,6 +21,8 @@ GameLayer::GameLayer(Game* game)
 	pause = true;
 	message = new Actor("res/mensaje_como_jugar.png", WIDTH*0.5, HEIGHT*0.5,
 		WIDTH, HEIGHT, game);
+	doorTeleports = new DoorTeleports();
+
 	init();
 }
 
@@ -47,6 +49,8 @@ void GameLayer::init() {
 
 	background = new Background("res/fondo_2.png", WIDTH * 0.5, HEIGHT * 0.5, -1, game);
 	
+	// Teletransportes
+	doorTeleports->clearTeleports();
 
 	// Enemigos
 	enemies.clear(); // Vaciar la lista de enemigos, por si se reinicia el juego
@@ -283,8 +287,6 @@ void GameLayer::update() {
 		return;
 	}
 
-
-
 	// Actualizamos todos los actores dinámicos
 	space->update();
 
@@ -360,6 +362,14 @@ void GameLayer::update() {
 		tile->update(); // Actualizar ticks del tile
 		if (tile->willDestroy()) { // Si el tile se va a destruir...
 			markTileForDelete(tile, deleteTiles); // Eliminarlo
+		}
+	}
+
+
+	// Colisiones del jugador con una puerta
+	for (auto const& door : doorTeleports->doors) {
+		if (player->isOverlap(door)) {
+			door->teleport(player); // Teletransportar al jugador
 		}
 	}
 
@@ -439,7 +449,7 @@ void GameLayer::draw() {
 	for (auto const& tile : tiles) {
 		tile->draw(scrollX, scrollY);
 	}
-
+	// Dibujamos al jugador
 	player->draw(scrollX, scrollY);
 
 	//Dibujamos la copa
@@ -453,6 +463,9 @@ void GameLayer::draw() {
 	for (auto const& projectile : projectiles) {
 		projectile->draw(scrollX, scrollY);
 	}
+
+	// Dibujamos los teletransportes
+	doorTeleports->draw(scrollX, scrollY);
 
 	textPoints->draw();
 	backgroundPoints->draw();
@@ -555,6 +568,17 @@ void GameLayer::loadMapObject(char character, float x, float y)
 			destroyableTile->y = destroyableTile->y - destroyableTile->height / 2;
 			tiles.push_back(destroyableTile);
 			space->addStaticActor(destroyableTile);
+			break;
+		}
+		case '4':
+		case '5':
+		case '7':
+		case '8':
+		case '9': {
+			Door* door = new Door(character, x, y, game);
+			door->y = door->y - door->height / 2;
+			space->addStaticActor(door);
+			doorTeleports->addDoor(door);
 			break;
 		}
 	}

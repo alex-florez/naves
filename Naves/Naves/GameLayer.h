@@ -12,6 +12,7 @@
 #include "DestroyableTile.h"
 #include "Space.h"
 #include "Pad.h"
+#include "DoorTeleports.h"
 
 #include <list>
 #include <fstream> // Leer ficheros
@@ -65,6 +66,9 @@ public:
 
 	int newEnemyTime = 0;
 	int killedEnemies = 0;
+
+	// Teletransportes
+	DoorTeleports* doorTeleports;
 
 	// Puntuación
 	Text* textPoints;
