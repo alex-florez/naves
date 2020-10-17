@@ -320,6 +320,16 @@ void GameLayer::update() {
 		if (!projectile->isInRender(scrollX, scrollY) || projectile->vx == 0) {
 			markProjectileForDelete(projectile, deleteProjectiles);
 		}
+
+		// Comprobamos colisiones de proyectiles con tiles 
+		for (auto const& tile : tiles) {
+			if (tile->isOverlap(projectile)) {
+				if (tile->isDestroyable()) {// Si el tile es destruible, se elimina
+					markTileForDelete(tile, deleteTiles);
+					markProjectileForDelete(projectile, deleteProjectiles);
+				}	
+			}
+		}
 	}
 
 	// Colisiones entre enemigos y proyectiles
@@ -533,7 +543,15 @@ void GameLayer::loadMapObject(char character, float x, float y)
 			break;
 		}
 		case 'W': {
-			Tile* destroyableTile = new DestroyableTile("res/bloque_fondo_muro.png", 20, x, y, game);
+			Tile* crushableTile = new CrushableTile("res/bloque_fondo_muro.png", 20, x, y, game);
+			crushableTile->y = crushableTile->y - crushableTile->height / 2;
+			tiles.push_back(crushableTile);
+			space->addStaticActor(crushableTile);
+			break;
+		}
+
+		case 'U': {
+			Tile* destroyableTile = new DestroyableTile("res/caja_madera.png", x, y, game);
 			destroyableTile->y = destroyableTile->y - destroyableTile->height / 2;
 			tiles.push_back(destroyableTile);
 			space->addStaticActor(destroyableTile);

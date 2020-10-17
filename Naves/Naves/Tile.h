@@ -9,7 +9,8 @@ public:
 
 	virtual void update();
 	virtual bool willDestroy();
-
+	virtual bool isDestroyable();
+	
 	bool playerIsOver = false; // Indica si el jugador está o no encima del tile.
 };
 

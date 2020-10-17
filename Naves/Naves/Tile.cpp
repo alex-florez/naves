@@ -13,3 +13,7 @@ void Tile::update() {
 bool Tile::willDestroy() {
 	return false;
 }
+
+bool Tile::isDestroyable() {
+	return false;
+}
